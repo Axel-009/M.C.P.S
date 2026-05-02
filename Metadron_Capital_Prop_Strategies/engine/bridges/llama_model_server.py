@@ -23,7 +23,7 @@ import signal
 import logging
 from pathlib import Path
 
-logger = logging.getLogger("metadron.bridges.llama_server")
+logger = logging.getLogger("llama-model-server")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 
 # Ensure project root on path

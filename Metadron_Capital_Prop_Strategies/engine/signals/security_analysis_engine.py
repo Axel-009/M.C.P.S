@@ -53,7 +53,7 @@ logger = logging.getLogger("metadron.signals.security_analysis")
 
 # --- agent_skills integration -------------------------------------------------
 try:
-    from Metadron_Capital_Prop_Strategies.agent_skills import (
+    from intelligence_platform.agent_skills import (
         create_skill, list_custom_skills, test_skill,
         extract_file_ids, download_file, download_all_files,
     )
@@ -68,7 +68,7 @@ try:
     _mav_spec = _ilu.spec_from_file_location(
         "multi_asset_analysis",
         str(__import__("pathlib").Path(__file__).resolve().parent.parent.parent
-            / "integrations" / "mav_analysis" / "multi_asset_analysis.py"),
+            / "intelligence_platform" / "Mav-Analysis" / "multi_asset_analysis.py"),
     )
     _mav_mod = _ilu.module_from_spec(_mav_spec)
     _mav_spec.loader.exec_module(_mav_mod)
@@ -85,7 +85,7 @@ try:
     _sc_spec = _ilu.spec_from_file_location(
         "asset_class_analyzer",
         str(__import__("pathlib").Path(__file__).resolve().parent.parent.parent
-            / "integrations" / "stock_chain" / "asset_class_analyzer.py"),
+            / "intelligence_platform" / "stock-chain" / "asset_class_analyzer.py"),
     )
     _sc_mod = _ilu.module_from_spec(_sc_spec)
     _sc_spec.loader.exec_module(_sc_mod)

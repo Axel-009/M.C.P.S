@@ -9,7 +9,7 @@ The bridge exposes:
     2. High-conviction signal extraction (multiple elite funds accumulating)
     3. Promise Score integration for ML feature engineering
 
-Source repo: integrations/hedgefund_tracker
+Source repo: intelligence_platform/hedgefund-tracker
 Key modules:
     - app/analysis/stocks.py        → quarter_analysis(), stock_analysis()
     - app/ai/agent.py               → AnalystAgent (Promise Score)
@@ -29,7 +29,7 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
-logger = logging.getLogger("metadron.intelligence.hedgefund_tracker")
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Intelligence Platform: hedgefund-tracker integration
@@ -37,7 +37,7 @@ logger = logging.getLogger("metadron.intelligence.hedgefund_tracker")
 # ---------------------------------------------------------------------------
 TRACKER_BASE = (
     Path(__file__).resolve().parent.parent.parent.parent
-    / "integrations" / "hedgefund_tracker"
+    / "intelligence_platform" / "hedgefund-tracker"
 )
 
 try:

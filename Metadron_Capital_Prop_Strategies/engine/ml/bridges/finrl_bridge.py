@@ -22,7 +22,7 @@ except Exception:
         DRL_AGENT_BUY = "DRL_AGENT_BUY"
         DRL_AGENT_SELL = "DRL_AGENT_SELL"
 
-logger = logging.getLogger("metadron.intelligence.finrl")
+logger = logging.getLogger(__name__)
 
 
 class FinRLBridge:

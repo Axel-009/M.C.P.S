@@ -2,13 +2,13 @@
 Metadron Capital — Unified LLM Inference Bridge (Parallel Ensemble)
 
 All models run simultaneously and constantly in parallel.
-Brain Power (OpenRouter) is the orchestrating intelligence
+Brain Power (Xiaomi Mimo V2 Pro) is the orchestrating intelligence
 that receives outputs from all other models and synthesizes, corrects,
 or navigates the final decision/output.
 
 Architecture:
     [Llama 3.1-8B]  ─────┐  (Ollama, port 11434, fast router)
-    [Qwen 2.5-7B]  ──────┤──► [Brain Power / OpenRouter] ──► Final Output
+    [Qwen 2.5-7B]  ──────┤──► [Brain Power / Xiaomi Mimo] ──► Final Output
     [AI-Newton]    ──────┤       (synthesize / correct / navigate)
     [AlphaOptimizer]─────┤
     [DeepLearning] ──────┘
@@ -28,7 +28,7 @@ from typing import Optional
 from dataclasses import dataclass, field
 from concurrent.futures import ThreadPoolExecutor
 
-logger = logging.getLogger("metadron.bridges.llm_inference")
+logger = logging.getLogger("llm-bridge")
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -101,7 +101,7 @@ class LLMBackend:
 class LLMInferenceBridge:
     """Parallel ensemble — all models run simultaneously.
 
-    Brain Power (OpenRouter) is the orchestrator that synthesizes
+    Brain Power (Xiaomi Mimo V2 Pro) is the orchestrator that synthesizes
     outputs from Air-LLM and Qwen into a final response. If Brain Power
     API key is not configured, returns merged local model outputs.
     """
@@ -116,9 +116,9 @@ class LLMInferenceBridge:
     def _initialize_backends(self):
         """Register all backends for parallel ensemble execution."""
         self.backends["brain_power"] = LLMBackend(
-            name="Brain Power (OpenRouter)",
+            name="Brain Power (Xiaomi Mimo V2 Pro)",
             backend_type="brain_power",
-            model_id="openrouter/auto",
+            model_id="xiaomi-mimo-v2-pro",
             capabilities=["text", "reasoning", "code", "analysis", "long_context",
                           "sentiment", "earnings", "sec_filing", "trade_thesis",
                           "narrative", "orchestration", "synthesis"],
@@ -334,7 +334,7 @@ class LLMInferenceBridge:
 
         # Build synthesis context for Brain Power
         synthesis_parts = [
-            "You are Brain Power (OpenRouter), the orchestrating intelligence "
+            "You are Brain Power (Xiaomi Mimo V2 Pro), the orchestrating intelligence "
             "for Metadron Capital's parallel ensemble system. Multiple models have "
             "simultaneously processed the same request. Your job is to synthesize, "
             "correct, or navigate their outputs into the best final response.\n",
@@ -635,7 +635,7 @@ def create_app():
         title="Metadron LLM Inference Bridge — Parallel Ensemble",
         description=(
             "Parallel ensemble: Air-LLM + Qwen run simultaneously, "
-            "Brain Power (OpenRouter) orchestrates final output."
+            "Brain Power (Xiaomi Mimo V2 Pro) orchestrates final output."
         ),
         version="3.0.0",
     )

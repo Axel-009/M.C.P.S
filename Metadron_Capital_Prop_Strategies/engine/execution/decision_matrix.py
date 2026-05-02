@@ -1028,10 +1028,12 @@ class DecisionMatrix:
                 lines.append(
                     f"  {i:>3}  {r['ticker']:<8} {r['side']:<6} "
                     f"{r['composite_score']:>7.3f}  "
-                    f"{gs.get('FUNDAMENTALS', 0):>7.3f} "
-                    f"{gs.get('FLOW_HEADLINES', 0):>7.3f} "
-                    f"{gs.get('MACRO_REGIME', 0):>7.3f} "
-                    f"{gs.get('MOMENTUM', 0):>7.3f} "
+                    f"{gs.get('ALPHA_QUALITY', 0):>7.3f} "
+                    f"{gs.get('REGIME_ALIGNMENT', 0):>7.3f} "
+                    f"{gs.get('RISK_BUDGET', 0):>7.3f} "
+                    f"{gs.get('CONVICTION_SCORE', 0):>7.3f} "
+                    f"{gs.get('MOMENTUM_CONFIRM', 0):>7.3f} "
+                    f"{gs.get('LIQUIDITY_CHECK', 0):>7.3f}"
                 )
 
         # Rejected trades

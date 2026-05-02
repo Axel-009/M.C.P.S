@@ -24,7 +24,7 @@ from fastapi import APIRouter
 from datetime import datetime
 import logging
 
-logger = logging.getLogger("metadron.api.cube")
+logger = logging.getLogger("metadron-api.cube")
 router = APIRouter()
 
 # ---------------------------------------------------------------------------

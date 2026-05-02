@@ -9,7 +9,7 @@ from pathlib import Path
 import logging
 import os
 
-logger = logging.getLogger("metadron.api.monitoring")
+logger = logging.getLogger("metadron-api.monitoring")
 router = APIRouter()
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent

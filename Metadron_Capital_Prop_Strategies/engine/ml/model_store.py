@@ -25,7 +25,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Optional, Any, Dict
 
-logger = logging.getLogger("metadron.intelligence.model_store")
+logger = logging.getLogger(__name__)
 
 # joblib for sklearn models
 try:

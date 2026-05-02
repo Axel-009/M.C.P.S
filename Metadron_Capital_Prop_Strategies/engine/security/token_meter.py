@@ -16,7 +16,7 @@ calls return cached/summary responses only — no new inference.
 
 Daily report generated to data/archive/token_usage/YYYY-MM-DD.json.gz
 with full hourly breakdown per model, caller attribution, anomaly
-flags, and cost estimation for OpenRouter corroboration.
+flags, and cost estimation for Xiaomi corroboration.
 """
 
 import gzip

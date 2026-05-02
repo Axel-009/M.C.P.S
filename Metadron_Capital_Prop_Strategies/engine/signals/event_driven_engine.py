@@ -53,7 +53,7 @@ try:
     _tte_spec = _ilu.spec_from_file_location(
         "event_driven_strategy",
         str(__import__("pathlib").Path(__file__).resolve().parent.parent.parent
-            / "integrations" / "trade_the_event" / "event_driven_strategy.py"),
+            / "intelligence_platform" / "TradeTheEvent" / "event_driven_strategy.py"),
     )
     _tte_mod = _ilu.module_from_spec(_tte_spec)
     _tte_spec.loader.exec_module(_tte_mod)

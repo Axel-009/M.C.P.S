@@ -16,7 +16,7 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter
 
-logger = logging.getLogger("metadron.api.security")
+logger = logging.getLogger("metadron-api.security")
 router = APIRouter()
 
 

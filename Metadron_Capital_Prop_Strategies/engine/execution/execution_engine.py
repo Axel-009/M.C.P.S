@@ -64,7 +64,7 @@ from .paper_broker import (
 try:
     from .alpaca_broker import AlpacaBroker
 except ImportError:
-    AlpacaBroker = None  # type: ignore[assignment,misc]  # legacy
+    AlpacaBroker = None  # type: ignore[assignment,misc]
 
 
 # L7 HFT Technical Execution (quant-trading strategies)
@@ -1138,18 +1138,18 @@ class ExecutionEngine:
                 self.broker = PaperBroker(initial_cash=initial_nav or 100_000.0)
                 self._broker_alert = "NOTICE: IBKR unavailable — trade log mode (no live execution)"
         elif broker_type == "ibkr":
-            if AlpacaBroker is not None:  # legacy
+            if AlpacaBroker is not None:
                 try:
-                    self.broker = AlpacaBroker(initial_cash=initial_nav or 100_000.0)  # legacy
+                    self.broker = AlpacaBroker(initial_cash=initial_nav or 100_000.0)
                     logger.info("ExecutionEngine using AlpacaBroker (legacy, paper=%s)",
                                 self.broker.paper)
                 except Exception as e:
-                    logger.error("AlpacaBroker (legacy) failed: %s — falling back to trade log", e)
+                    logger.error("AlpacaBroker failed: %s — falling back to trade log", e)
                     self.broker = PaperBroker(initial_cash=initial_nav or 100_000.0)
-                    self._broker_alert = "NOTICE: AlpacaBroker (legacy) failed — trade log mode"
+                    self._broker_alert = "NOTICE: AlpacaBroker failed — trade log mode"
             else:
                 self.broker = PaperBroker(initial_cash=initial_nav or 100_000.0)
-                self._broker_alert = "NOTICE: AlpacaBroker (legacy) unavailable — trade log mode"
+                self._broker_alert = "NOTICE: AlpacaBroker unavailable — trade log mode"
         else:
             self.broker = PaperBroker(initial_cash=initial_nav or 100_000.0)
             logger.info("ExecutionEngine using trade log mode (broker_type=%s)", broker_type)
@@ -1304,14 +1304,14 @@ class ExecutionEngine:
     def get_broker_status(self) -> dict:
         """Get current broker status and any routing alerts."""
         broker_type = type(self.broker).__name__
-        is_live = broker_type in ("IBKRBroker", "AlpacaBroker")  # legacy
+        is_live = broker_type in ("IBKRBroker", "AlpacaBroker")
         return {
             "broker": broker_type,
             "is_live": is_live,
             "is_trade_log_only": broker_type == "PaperBroker",
             "alert": self._broker_alert,
             "trades_today": len(self._trade_log),
-            "trades_to_broker": sum(1 for t in self._trade_log if t.get("broker") in ("IBKRBroker", "AlpacaBroker")),  # legacy
+            "trades_to_broker": sum(1 for t in self._trade_log if t.get("broker") in ("IBKRBroker", "AlpacaBroker")),
             "trades_to_log": sum(1 for t in self._trade_log if t.get("broker") == "PaperBroker"),
         }
 

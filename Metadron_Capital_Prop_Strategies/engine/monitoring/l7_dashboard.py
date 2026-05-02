@@ -36,7 +36,7 @@ try:
 except ImportError:
     RICH_AVAILABLE = False
 
-logger = logging.getLogger("metadron.monitoring.l7_dashboard")
+logger = logging.getLogger(__name__)
 
 # ANSI codes
 _RESET = "\033[0m"

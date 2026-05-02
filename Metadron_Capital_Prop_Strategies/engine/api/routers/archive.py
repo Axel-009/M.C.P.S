@@ -7,7 +7,7 @@ from fastapi import APIRouter, Query
 from datetime import datetime, date
 import logging
 
-logger = logging.getLogger("metadron.api.archive")
+logger = logging.getLogger("metadron-api.archive")
 router = APIRouter()
 
 # ─── Lazy engine singletons ────────────────────────────────

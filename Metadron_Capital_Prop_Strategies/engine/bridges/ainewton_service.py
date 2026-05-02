@@ -23,7 +23,7 @@ import threading
 from pathlib import Path
 from datetime import datetime, timezone
 
-logger = logging.getLogger("metadron.bridges.ainewton_service")
+logger = logging.getLogger("ainewton-service")
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",

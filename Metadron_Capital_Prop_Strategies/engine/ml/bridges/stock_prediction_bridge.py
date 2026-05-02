@@ -17,7 +17,7 @@ except Exception:
         ML_AGENT_BUY = "ML_AGENT_BUY"
         ML_AGENT_SELL = "ML_AGENT_SELL"
 
-logger = logging.getLogger("metadron.intelligence.stock_prediction")
+logger = logging.getLogger(__name__)
 
 # Intelligence Platform: Stock-techincal-prediction-model integration
 # Provides: MultiAssetPredictor with LSTM, XGBoost, RF, Transformer ensemble.
@@ -28,7 +28,7 @@ try:
     _map_spec = _ilu.spec_from_file_location(
         "multi_asset_predictor",
         str(__import__("pathlib").Path(__file__).resolve().parent.parent.parent.parent
-            / "integrations" / "stock_prediction"
+            / "intelligence_platform" / "Stock-techincal-prediction-model"
             / "multi_asset_predictor.py"),
     )
     _map_mod = _ilu.module_from_spec(_map_spec)
@@ -50,7 +50,7 @@ try:
     _ae_spec = _ilu2.spec_from_file_location(
         "stock_autoencoder",
         str(Path(__file__).resolve().parent.parent.parent.parent
-            / "integrations" / "stock_prediction"
+            / "intelligence_platform" / "Stock-prediction"
             / "stacking" / "autoencoder.py"),
     )
     _ae_mod = _ilu2.module_from_spec(_ae_spec)
@@ -223,7 +223,7 @@ class StockPredictionBridge:
 
         When the full ML stack (tensorflow, xgboost, sklearn) is present,
         uses LSTM + XGBoost + RF + Transformer ensemble from
-        integrations/stock_prediction.
+        intelligence_platform/Stock-techincal-prediction-model.
         Falls back to the deterministic ES bridge otherwise.
 
         Args:

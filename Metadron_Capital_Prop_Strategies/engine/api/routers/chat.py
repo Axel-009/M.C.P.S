@@ -12,7 +12,7 @@ import asyncio
 import json
 import time
 
-logger = logging.getLogger("metadron.api.chat")
+logger = logging.getLogger("metadron-api.chat")
 router = APIRouter()
 
 # ─── Prometheus instrumentation ──────────────────────────────────
@@ -237,6 +237,8 @@ async def get_recommendations():
         recs = agent.get_pending_recommendations()
         # Track recommendation count
         prom = _get_prom()
+        if prom and "openclaw_recommendations_total" in prom and recs:
+            prom["openclaw_recommendations_total"].inc(len(recs))
         return {"recommendations": recs, "timestamp": datetime.utcnow().isoformat()}
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})

@@ -8,7 +8,7 @@ Authorized APIs:
     1. IBKR           — Trade execution (live + paper via TWS/Gateway)
     2. FMP            — Market data via OpenBB
     3. Zep            — MiroFish agent simulation (knowledge graph)
-    4. OpenRouter V2 — Brain Power LLM orchestrator
+    4. Xiaomi Mimo V2 — Brain Power LLM orchestrator
     5. OpenBB Token   — OpenBB SDK platform access
     6. Internal Token  — Frontend → Backend proxy auth (auto-generated)
 
@@ -74,8 +74,8 @@ VAULT_SLOTS = {
         "required": False,
         "category": "intelligence",
     },
-    "OPENROUTER_API_KEY": {
-        "label": "OpenRouter API Key",
+    "XIAOMI_MIMO_API_KEY": {
+        "label": "Xiaomi Mimo V2 Pro API Key",
         "target": "Brain Power LLM orchestrator (ensemble synthesis)",
         "required": False,
         "category": "intelligence",
@@ -222,8 +222,8 @@ class APIVault:
         return "https://api.ibkr.markets"
 
     @property
-    def openrouter_api_key(self) -> str:
-        return self._keys.get("OPENROUTER_API_KEY", "")
+    def xiaomi_mimo_api_key(self) -> str:
+        return self._keys.get("XIAOMI_MIMO_API_KEY", "")
 
 
 # ── Singleton ────────────────────────────────────────────────

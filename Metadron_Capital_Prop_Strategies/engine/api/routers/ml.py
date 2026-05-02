@@ -7,7 +7,7 @@ from fastapi import APIRouter, Query
 from datetime import datetime
 import logging
 
-logger = logging.getLogger("metadron.api.ml")
+logger = logging.getLogger("metadron-api.ml")
 router = APIRouter()
 
 _alpha = None
@@ -144,7 +144,7 @@ async def models_status():
             ("L5", "DecisionMatrix", "engine.execution.decision_matrix"),
             ("L5", "OptionsEngine", "engine.execution.options_engine"),
             ("L5", "PaperBroker", "engine.execution.paper_broker"),
-            ("L5", "AlpacaBroker", "engine.execution.alpaca_broker"),  # legacy
+            ("L5", "AlpacaBroker", "engine.execution.alpaca_broker"),
             ("L6", "ResearchBots", "engine.agents.research_bots"),
             ("L6", "SectorBots", "engine.agents.sector_bots"),
             ("L6", "AgentScorecard", "engine.agents.agent_scorecard"),
@@ -229,6 +229,7 @@ async def models_health():
             ("Ensemble", "DistressedAssetEngine", "engine.signals.distressed_asset_engine"),
             ("Framework", "OpenBBData", "engine.data.openbb_data"),
             ("Framework", "ModelStore", "engine.ml.model_store"),
+            ("Framework", "KServeAdapter", "engine.ml.bridges.kserve_adapter"),
         ]
 
         for model_type, name, module_path in engine_registry:

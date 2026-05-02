@@ -6,7 +6,7 @@ from fastapi import APIRouter
 from datetime import datetime
 import logging
 
-logger = logging.getLogger("metadron.api.macro")
+logger = logging.getLogger("metadron-api.macro")
 router = APIRouter()
 
 _macro = None

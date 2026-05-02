@@ -1,7 +1,7 @@
 """
 Metadron Capital -- QSTrader Backtest Bridge
 =============================================
-Bridges QSTrader (Metadron_Capital_Prop_Strategies/qstrader/) into the Metadron Capital
+Bridges QSTrader (intelligence_platform/qstrader/) into the Metadron Capital
 Intelligence Platform's backtesting framework.
 
 QSTrader provides institutional-grade backtesting with:
@@ -51,10 +51,10 @@ except ImportError:
     pd = None  # type: ignore
 
 # ---------------------------------------------------------------------------
-# QSTrader imports (from Metadron_Capital_Prop_Strategies.qstrader)
+# QSTrader imports (from intelligence_platform)
 # ---------------------------------------------------------------------------
 try:
-    from Metadron_Capital_Prop_Strategies.qstrader.alpha_model.alpha_model import (
+    from intelligence_platform.qstrader.alpha_model.alpha_model import (
         AlphaModel as _QSAlphaModel,
     )
     HAS_QS_ALPHA = True
@@ -67,7 +67,7 @@ except ImportError:
             raise NotImplementedError("QSTrader AlphaModel not available")
 
 try:
-    from Metadron_Capital_Prop_Strategies.qstrader.risk_model.risk_model import (
+    from intelligence_platform.qstrader.risk_model.risk_model import (
         RiskModel as _QSRiskModel,
     )
     HAS_QS_RISK = True
@@ -80,7 +80,7 @@ except ImportError:
             raise NotImplementedError("QSTrader RiskModel not available")
 
 try:
-    from Metadron_Capital_Prop_Strategies.qstrader.broker.fee_model.fee_model import (
+    from intelligence_platform.qstrader.broker.fee_model.fee_model import (
         FeeModel as _QSFeeModel,
     )
     HAS_QS_FEE = True
@@ -99,33 +99,33 @@ except ImportError:
             return 0.0
 
 try:
-    from Metadron_Capital_Prop_Strategies.qstrader.trading.backtest import (
+    from intelligence_platform.qstrader.trading.backtest import (
         BacktestTradingSession,
     )
 except ImportError:
     BacktestTradingSession = None  # type: ignore
 
 try:
-    from Metadron_Capital_Prop_Strategies.qstrader.asset.universe.static import StaticUniverse
+    from intelligence_platform.qstrader.asset.universe.static import StaticUniverse
 except ImportError:
     StaticUniverse = None  # type: ignore
 
 try:
-    from Metadron_Capital_Prop_Strategies.qstrader.statistics.tearsheet import (
+    from intelligence_platform.qstrader.statistics.tearsheet import (
         TearsheetStatistics,
     )
 except ImportError:
     TearsheetStatistics = None  # type: ignore
 
 try:
-    from Metadron_Capital_Prop_Strategies.qstrader.statistics.json_statistics import (
+    from intelligence_platform.qstrader.statistics.json_statistics import (
         JSONStatistics,
     )
 except ImportError:
     JSONStatistics = None  # type: ignore
 
 try:
-    from Metadron_Capital_Prop_Strategies.qstrader.statistics.performance import (
+    from intelligence_platform.qstrader.statistics.performance import (
         create_sharpe_ratio as _qs_sharpe,
         create_sortino_ratio as _qs_sortino,
         create_cagr as _qs_cagr,
@@ -138,14 +138,14 @@ except ImportError:
     _qs_drawdowns = None
 
 try:
-    from Metadron_Capital_Prop_Strategies.qstrader.broker.fee_model.zero_fee_model import (
+    from intelligence_platform.qstrader.broker.fee_model.zero_fee_model import (
         ZeroFeeModel,
     )
 except ImportError:
     ZeroFeeModel = None  # type: ignore
 
 try:
-    from Metadron_Capital_Prop_Strategies.qstrader import settings as qstrader_settings
+    from intelligence_platform.qstrader import settings as qstrader_settings
 except ImportError:
     qstrader_settings = None  # type: ignore
 
@@ -234,7 +234,7 @@ except ImportError:
         FLAT = "FLAT"
 
 
-logger = logging.getLogger("metadron.intelligence.qstrader_bridge")
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Constants

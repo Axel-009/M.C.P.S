@@ -12,7 +12,7 @@ from fastapi import APIRouter, Query
 from datetime import datetime
 import logging
 
-logger = logging.getLogger("metadron.api.agents")
+logger = logging.getLogger("metadron-api.agents")
 router = APIRouter()
 
 # ---------------------------------------------------------------------------

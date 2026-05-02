@@ -9,7 +9,7 @@ import logging
 import time
 from datetime import datetime, timezone
 
-logger = logging.getLogger("metadron.api.models")
+logger = logging.getLogger("models-router")
 
 try:
     from fastapi import APIRouter
@@ -22,7 +22,7 @@ router = APIRouter()
 # Model registry — all models in the Metadron ensemble
 MODEL_REGISTRY = [
     {
-        "name": "Brain Power (OpenRouter)",
+        "name": "Brain Power (Xiaomi Mimo V2 Pro)",
         "key": "brain_power",
         "port": "API",
         "module": "engine.bridges.brain_power",

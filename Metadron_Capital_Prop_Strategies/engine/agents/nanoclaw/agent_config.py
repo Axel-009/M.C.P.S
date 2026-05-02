@@ -1,8 +1,8 @@
-"""Agent identity configuration — NanoClaw, Ruflo."""
+"""Agent identity configuration — NanoClaw, OpenClaw/CEO, Ruflo."""
 
 # ─── Agent Identity Constants ──────────────────────────────────────
 NANOCLAW_ID = "nanoclaw"
-
+OPENCLAW_ID = "openclaw"
 RUFLO_ID = "ruflo"
 
 # ─── Display Metadata ─────────────────────────────────────────────
@@ -15,7 +15,15 @@ AGENT_DISPLAY = {
         "description": "Governing operator agent with write access (requires explicit instruction from AJ).",
         "permission_summary": "WRITE (with explicit operator instruction)",
     },
-RUFLO_ID: {
+    OPENCLAW_ID: {
+        "name": "OpenClaw",
+        "display_name": "CEO RESEARCH",
+        "color": "#fbbf24",
+        "role": "CEO Research Agent",
+        "description": "Research-only agent. Produces recommendations that require NanoClaw approval.",
+        "permission_summary": "READ + RECOMMEND only — all writes blocked",
+    },
+    RUFLO_ID: {
         "name": "Ruflo",
         "display_name": "RUFLO SWARM",
         "color": "#4facfe",
@@ -25,7 +33,9 @@ RUFLO_ID: {
     },
 }
 
-ALL_AGENT_IDS = [NANOCLAW_ID, RUFLO_ID]
+ALL_AGENT_IDS = [NANOCLAW_ID, OPENCLAW_ID, RUFLO_ID]
+
+
 def get_agent_info(agent_id: str) -> dict:
     """Return full identity, permissions, and display metadata for an agent."""
     from engine.agents.nanoclaw.permission_guard import AgentPermissionGuard
@@ -42,6 +52,8 @@ def get_agent_info(agent_id: str) -> dict:
         **display,
         **perms,
     }
+
+
 def get_all_agents_info() -> list[dict]:
     """Return info for all registered agents."""
     return [get_agent_info(aid) for aid in ALL_AGENT_IDS]

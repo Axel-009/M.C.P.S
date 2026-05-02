@@ -16,7 +16,7 @@ import traceback
 
 from engine.api.shared import get_broker, get_engine, get_beta
 
-logger = logging.getLogger("metadron.api.portfolio")
+logger = logging.getLogger("metadron-api.portfolio")
 router = APIRouter()
 
 # ─── Alpha optimizer — local lazy singleton (not on ExecutionEngine) ──

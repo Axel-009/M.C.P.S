@@ -26,7 +26,7 @@ from collections import OrderedDict
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
-logger = logging.getLogger("metadron.wiring")
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
@@ -86,7 +86,7 @@ _reg("news_engine",
      desc="newsfilter.io WebSocket (10K+ sources) + FMP fallback — feeds Track B independently")
 
 # ---------- Phase 2: SIGNALS ----------
-# Track A: Money Velocity → Macro Regime → Sector/Trend ID → Bottom-Up Fundamental Microstructure
+# Track A: FedLiquidity → MacroEngine → MetadronCube → parallel signal engines
 # Track B: NewsEngine → MiroMomentum → EventDriven + CVR (independent from Cube)
 _reg("fed_liquidity",
      "engine.signals.fed_liquidity_plumbing", "FedLiquidityPlumbing",
@@ -454,7 +454,7 @@ ROUTING_RULES: List[RoutingRule] = [
         rule_id="R09",
         description=(
             "IBKRBroker is the SOLE execution broker. No raw API calls to IBKR, "
-            "Tradier, or any other broker. AlpacaBroker and TradierBroker exist only "  # legacy
+            "Tradier, or any other broker. AlpacaBroker and TradierBroker exist only "
             "as legacy references — they MUST NOT be used for new execution code."
         ),
         enforced_by="ibkr_broker",
@@ -586,8 +586,8 @@ def validate_wiring() -> Dict[str, Any]:
     # Scan key files for direct IBKRBroker/IBKRBroker (legacy) usage in
     # execution paths (not legacy references or try/except fallbacks).
     _FORBIDDEN_BROKER_IMPORTS = [
-        ("engine.execution.alpaca_broker", "AlpacaBroker"),  # legacy
-        ("engine.execution.tradier_broker", "TradierBroker"),  # legacy
+        ("engine.execution.alpaca_broker", "AlpacaBroker"),
+        ("engine.execution.tradier_broker", "TradierBroker"),
     ]
     _FILES_TO_SCAN = [
         "engine/execution/l7_unified_execution_surface.py",

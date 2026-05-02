@@ -36,7 +36,7 @@ from pathlib import Path
 
 import numpy as np
 
-logger = logging.getLogger("metadron.intelligence.markov_regime")
+logger = logging.getLogger(__name__)
 
 # hmmlearn from local source or installed package
 MARKOV_MODEL_DIR = Path(__file__).parent.parent.parent.parent / "repos" / "markov-model"

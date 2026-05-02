@@ -17,7 +17,7 @@ import logging
 from engine.data.openbb_data import get_quote, get_prices
 from engine.api.shared import get_engine, get_l7
 
-logger = logging.getLogger("metadron.api.execution")
+logger = logging.getLogger("metadron-api.execution")
 router = APIRouter()
 
 # WondertraderEngine — local lazy singleton (optional HFT only, not shared)
@@ -74,7 +74,7 @@ async def reconciliation():
         ibkr_nav = 0
         try:
             from engine.execution.alpaca_broker import AlpacaBroker
-            alpaca = AlpacaBroker(initial_cash=0, paper=True)  # legacy
+            alpaca = AlpacaBroker(initial_cash=0, paper=True)
             broker_pos = ibkr.get_positions()
             ibkr_nav = ibkr.compute_nav()
         except Exception:
@@ -538,7 +538,7 @@ async def algo_comparison():
 async def nav_history():
     """NAV history for reconciliation (paper vs live broker).
 
-    Fits in system: L5 PaperBroker + IBKRBroker → NAV comparison.
+    Fits in system: L5 PaperBroker + AlpacaBroker → NAV comparison.
     """
     try:
         eng = get_engine()

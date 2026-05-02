@@ -2,7 +2,7 @@
 AI Hedge Fund HFT Bridge — wraps the ai-hedgefund HFT engine for L7 integration.
 
 Provides high-frequency execution capabilities to the L7 Unified Execution Surface.
-The underlying HFTEngine lives at integrations/ai_hedgefund/src/execution/hft_engine.py.
+The underlying HFTEngine lives at intelligence_platform/ai-hedgefund/src/execution/hft_engine.py.
 Falls back gracefully if the engine is unavailable.
 """
 from __future__ import annotations
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 _HFT_PATH = (
     Path(__file__).resolve().parent.parent.parent
-    / "integrations" / "ai_hedgefund"
+    / "intelligence_platform" / "ai-hedgefund"
     / "src" / "execution" / "hft_engine.py"
 )
 

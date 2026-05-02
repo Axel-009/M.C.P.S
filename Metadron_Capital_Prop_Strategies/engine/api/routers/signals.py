@@ -7,7 +7,7 @@ from fastapi import APIRouter, Query
 from datetime import datetime
 import logging
 
-logger = logging.getLogger("metadron.api.signals")
+logger = logging.getLogger("metadron-api.signals")
 router = APIRouter()
 
 _stat_arb = None

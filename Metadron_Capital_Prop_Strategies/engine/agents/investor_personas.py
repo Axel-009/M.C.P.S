@@ -23,11 +23,11 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-logger = logging.getLogger("metadron.agents.investor_personas")
+logger = logging.getLogger(__name__)
 
 # --- agent_skills integration -------------------------------------------------
 try:
-    from Metadron_Capital_Prop_Strategies.agent_skills import (
+    from intelligence_platform.agent_skills import (
         create_skill, list_custom_skills, test_skill,
         extract_file_ids, download_file, download_all_files,
     )
@@ -51,7 +51,7 @@ except ImportError:
 # Upstream agent imports (all wrapped)
 # ---------------------------------------------------------------------------
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent   # engine/agents/../../.. = repo root
-_INTELLIGENCE_BASE = str(_REPO_ROOT / "integrations" / "ai_hedgefund" / "src" / "agents")
+_INTELLIGENCE_BASE = str(_REPO_ROOT / "intelligence_platform" / "ai-hedgefund" / "src" / "agents")
 
 _PERSONA_NAMES: List[str] = [
     "warren_buffett", "charlie_munger", "ben_graham", "peter_lynch",
@@ -610,7 +610,7 @@ _CORE_FALLBACKS: Dict[str, Callable] = {
 class InvestorPersonaManager:
     """Manages 12 investor persona agents + 8 core analysis agents.
 
-    On init, attempts to import each agent from the integrations/ai_hedgefund copy.
+    On init, attempts to import each agent from the intelligence_platform copy.
     If unavailable, falls back to simplified rule-based evaluators that mimic
     each persona's investment philosophy.
     """
@@ -636,8 +636,8 @@ class InvestorPersonaManager:
         import importlib
         import sys
 
-        # Ensure integrations/ai_hedgefund path is importable
-        ip_root = str(_REPO_ROOT / "integrations" / "ai_hedgefund")
+        # Ensure intelligence_platform path is importable
+        ip_root = str(_REPO_ROOT / "intelligence_platform" / "ai-hedgefund")
         if ip_root not in sys.path:
             sys.path.insert(0, ip_root)
 

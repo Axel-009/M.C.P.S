@@ -13,7 +13,7 @@ import time
 from pathlib import Path
 from typing import Optional
 
-logger = logging.getLogger("metadron.pm2")
+logger = logging.getLogger(__name__)
 
 PLATFORM_ROOT = Path(__file__).resolve().parent.parent
 ECOSYSTEM_CONFIG = PLATFORM_ROOT / "ecosystem.config.cjs"

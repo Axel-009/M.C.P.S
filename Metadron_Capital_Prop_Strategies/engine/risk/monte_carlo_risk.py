@@ -27,7 +27,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
-    from Metadron_Capital_Prop_Strategies.integrations.mirofish.investment_platform_integration import (
+    from intelligence_platform.MiroFish.investment_platform_integration import (
         MarketSimulator,
         AgentType,
     )
@@ -41,7 +41,7 @@ try:
     _nvidia_spec = _ilu.spec_from_file_location(
         "nvidia_integration",
         str(__import__("pathlib").Path(__file__).resolve().parent.parent.parent
-            / "integrations" / "nvidia_gpu" / "investment_platform_integration.py"),
+            / "intelligence_platform" / "nividia-repo" / "investment_platform_integration.py"),
     )
     _nvidia_mod = _ilu.module_from_spec(_nvidia_spec)
     _nvidia_spec.loader.exec_module(_nvidia_mod)

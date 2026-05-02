@@ -21,7 +21,7 @@ except Exception:
         TFT_BUY = "TFT_BUY"
         TFT_SELL = "TFT_SELL"
 
-logger = logging.getLogger("metadron.intelligence.nvidia_tft")
+logger = logging.getLogger(__name__)
 
 
 class NvidiaTFTAdapter:

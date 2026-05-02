@@ -57,11 +57,11 @@ except ImportError:
     def get_engine():
         return None
 
-logger = logging.getLogger("metadron.agents.research_bots")
+logger = logging.getLogger(__name__)
 
 # --- agent_skills integration -------------------------------------------------
 try:
-    from Metadron_Capital_Prop_Strategies.agent_skills import (
+    from intelligence_platform.agent_skills import (
         create_skill, list_custom_skills, test_skill,
         extract_file_ids, download_file, download_all_files,
     )

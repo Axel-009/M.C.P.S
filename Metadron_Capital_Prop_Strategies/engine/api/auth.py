@@ -21,7 +21,7 @@ from fastapi import Depends, HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 
-logger = logging.getLogger("metadron.api.auth")
+logger = logging.getLogger("metadron-api.auth")
 
 # ---------------------------------------------------------------------------
 # Rate limiting — in-memory sliding window

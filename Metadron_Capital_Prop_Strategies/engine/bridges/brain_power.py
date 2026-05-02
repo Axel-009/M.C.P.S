@@ -1,8 +1,8 @@
-"""Brain Power API Bridge — OpenRouter
+"""Brain Power API Bridge — Xiaomi Mimo V2 Pro
 
 Centralized LLM inference bridge for the Metadron platform.
 All intelligence, NanoClaw reasoning, and engine-action calls
-route through the OpenRouter model via this bridge.
+route through the Xiaomi Mimo V2 Pro model via this bridge.
 
 The actual API endpoint/format will be configured once the key is provided.
 Until then the bridge operates in STUB MODE — returning structured placeholder
@@ -17,17 +17,17 @@ from typing import Optional
 
 logger = logging.getLogger("metadron.brain_power")
 
-# TODO: Configure actual OpenRouter API endpoint
-OPENROUTER_BASE_URL = os.environ.get(
-    "OPENROUTER_BASE_URL",
-    "https://api.openrouter.ai/api/v1",  # placeholder — update when known
+# TODO: Configure actual Xiaomi Mimo V2 Pro API endpoint
+XIAOMI_BASE_URL = os.environ.get(
+    "XIAOMI_MIMO_BASE_URL",
+    "https://api.xiaomi.com/mimo/v2",  # placeholder — update when known
 )
 
-OPENROUTER_DEFAULT_MODEL = "openrouter/auto"
+XIAOMI_DEFAULT_MODEL = "xiaomi-mimo-v2-pro"
 
 
 class BrainPowerClient:
-    """Unified client for OpenRouter — the sole LLM provider for Metadron.
+    """Unified client for Xiaomi Mimo V2 Pro — the sole LLM provider for Metadron.
 
     Usage:
         client = BrainPowerClient()
@@ -35,18 +35,18 @@ class BrainPowerClient:
     """
 
     def __init__(self):
-        self.api_key = os.environ.get("OPENROUTER_API_KEY", "")
-        self.base_url = OPENROUTER_BASE_URL
-        self.model = OPENROUTER_DEFAULT_MODEL
+        self.api_key = os.environ.get("XIAOMI_MIMO_API_KEY", "")
+        self.base_url = XIAOMI_BASE_URL
+        self.model = XIAOMI_DEFAULT_MODEL
         self._stub_mode = False
 
         if not self.api_key:
             self._stub_mode = True
             logger.warning(
-                "OPENROUTER_API_KEY not configured — Brain Power in stub mode"
+                "XIAOMI_MIMO_API_KEY not configured — Brain Power in stub mode"
             )
         else:
-            logger.info("Brain Power client initialized (OpenRouter)")
+            logger.info("Brain Power client initialized (Xiaomi Mimo V2 Pro)")
 
     @property
     def is_stub(self) -> bool:
@@ -65,11 +65,11 @@ class BrainPowerClient:
         stream: bool = False,
         **kwargs,
     ) -> dict:
-        """Send a chat/completion request to OpenRouter.
+        """Send a chat/completion request to Xiaomi Mimo V2 Pro.
 
         Args:
             messages:    List of {"role": ..., "content": ...} dicts.
-            model:       Model identifier (defaults to openrouter/auto).
+            model:       Model identifier (defaults to xiaomi-mimo-v2-pro).
             max_tokens:  Maximum tokens in the response.
             temperature: Sampling temperature.
             system:      Optional system prompt.
@@ -83,7 +83,7 @@ class BrainPowerClient:
         if self._stub_mode:
             return self._stub_chat_response(messages, use_model)
 
-        # TODO: Configure actual OpenRouter API endpoint
+        # TODO: Configure actual Xiaomi Mimo V2 Pro API endpoint
         # When the API spec is available, implement the HTTP call here:
         #
         #   import httpx
@@ -130,7 +130,7 @@ class BrainPowerClient:
             messages.append({
                 "role": "system",
                 "content": (
-                    "You are Brain Power (OpenRouter), the intelligence "
+                    "You are Brain Power (Xiaomi Mimo V2 Pro), the intelligence "
                     "engine for Metadron Capital. Current context:\n"
                     + json.dumps(context, indent=2, default=str)
                 ),
@@ -188,7 +188,7 @@ class BrainPowerClient:
     # ------------------------------------------------------------------
     def get_status(self) -> dict:
         return {
-            "provider": "OpenRouter",
+            "provider": "Xiaomi Mimo V2 Pro",
             "model": self.model,
             "base_url": self.base_url,
             "stub_mode": self._stub_mode,
@@ -212,9 +212,9 @@ class BrainPowerClient:
                 f"Model: {model}\n"
                 f"Timestamp: {datetime.utcnow().isoformat()}\n\n"
                 f"Received prompt ({len(last_user_msg)} chars). "
-                f"OPENROUTER_API_KEY is not yet configured. "
+                f"XIAOMI_MIMO_API_KEY is not yet configured. "
                 f"Once the key is provided, this response will be replaced "
-                f"with live OpenRouter inference.\n\n"
+                f"with live Xiaomi Mimo V2 Pro inference.\n\n"
                 f"Stub acknowledgement of request."
             ),
             "model": model,

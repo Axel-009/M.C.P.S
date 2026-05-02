@@ -1,11 +1,11 @@
-"""Agent Permission Guard — enforces read-only on  and Ruflo agents.
+"""Agent Permission Guard — enforces read-only on OpenClaw/CEO and Ruflo agents.
 
 NanoClaw is the ONLY agent with write access, and only with explicit operator instruction.
 """
 import logging
 from datetime import datetime
 
-logger = logging.getLogger("metadron.agents.nanoclaw.permissions")
+logger = logging.getLogger("metadron-api.nanoclaw.permissions")
 
 # ─── Permission Matrix ─────────────────────────────────────────────
 AGENT_PERMISSIONS = {
@@ -21,6 +21,19 @@ AGENT_PERMISSIONS = {
         "push_code": True,
         "call_l7": True,
         "requires_permission": True,
+    },
+    "openclaw": {
+        "read_data": True,
+        "search": True,
+        "analyze": True,
+        "recommend": True,
+        "write_file": False,
+        "execute_trade": False,
+        "modify_config": False,
+        "update_rules": False,
+        "push_code": False,
+        "call_l7": False,
+        "requires_permission": False,
     },
     "ruflo": {
         "read_data": True,

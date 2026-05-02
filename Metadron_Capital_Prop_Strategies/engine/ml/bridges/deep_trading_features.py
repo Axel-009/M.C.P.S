@@ -7,7 +7,7 @@ import logging
 
 import numpy as np
 
-logger = logging.getLogger("metadron.intelligence.deep_trading")
+logger = logging.getLogger(__name__)
 
 
 class DeepTradingFeatureBuilder:

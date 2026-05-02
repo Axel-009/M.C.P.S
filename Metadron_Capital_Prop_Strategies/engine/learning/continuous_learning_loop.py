@@ -13,7 +13,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 from typing import Optional
 
-logger = logging.getLogger("metadron.learning.continuous_loop")
+logger = logging.getLogger("learning-loop")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 
 PLATFORM_ROOT = Path(__file__).resolve().parent.parent.parent

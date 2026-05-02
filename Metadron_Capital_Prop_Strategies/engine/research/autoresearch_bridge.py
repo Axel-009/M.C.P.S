@@ -8,7 +8,7 @@ import logging
 import csv
 from pathlib import Path
 
-logger = logging.getLogger("metadron.research.autoresearch")
+logger = logging.getLogger(__name__)
 
 _AUTORESEARCH_ROOT = Path(__file__).resolve().parent / "autoresearch"
 _RESULTS_TSV = _AUTORESEARCH_ROOT / "results.tsv"

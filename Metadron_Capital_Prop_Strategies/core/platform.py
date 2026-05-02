@@ -60,12 +60,12 @@ class MetadronPlatform:
             config = yaml.safe_load(f)
 
         base_dir = self.config_path.parent.parent
-        intel_dir = base_dir / "integrations"
+        intel_dir = base_dir / "intelligence_platform"
         repos_dir = base_dir / "repos"
 
         for name, repo_cfg in config.get("repos", {}).items():
             repo_path = (base_dir / repo_cfg["path"]).resolve()
-            # Fallback: check integrations/ if primary path missing
+            # Fallback: check intelligence_platform/ and repos/ if primary path missing
             if not repo_path.exists():
                 repo_dirname = Path(repo_cfg["path"]).name
                 alt_intel = intel_dir / repo_dirname

@@ -36,7 +36,7 @@ try:
 except ImportError:
     np = None  # type: ignore
 
-logger = logging.getLogger("metadron.agents.dynamic_factory")
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -220,7 +220,7 @@ class DynamicAgentFactory:
     enforcement and pattern-aware learning for all agents.
 
     Usage:
-        from Metadron_Capital_Prop_Strategies.plugins.gsd_paul_plugin import (
+        from intelligence_platform.plugins.gsd_paul_plugin import (
             GSDPlugin, PaulPlugin, AgentLearningWrapper,
         )
 

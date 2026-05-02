@@ -40,12 +40,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional
 
-logger = logging.getLogger("metadron.agents.paul_orchestrator")
+logger = logging.getLogger(__name__)
 
 
 # --- agent_skills integration -------------------------------------------------
 try:
-    from Metadron_Capital_Prop_Strategies.agent_skills import (
+    from intelligence_platform.agent_skills import (
         create_skill, list_custom_skills, test_skill,
         extract_file_ids, download_file, download_all_files,
     )
@@ -98,7 +98,7 @@ class PaulOrchestrator:
         status = {"timestamp": datetime.now().isoformat()}
 
         try:
-            from Metadron_Capital_Prop_Strategies.plugins.gsd_paul_plugin import (
+            from intelligence_platform.plugins.gsd_paul_plugin import (
                 GSDPlugin,
                 PaulPlugin,
                 AgentLearningWrapper,

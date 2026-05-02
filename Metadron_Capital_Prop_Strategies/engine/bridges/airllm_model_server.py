@@ -22,7 +22,7 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-logger = logging.getLogger("metadron.bridges.airllm_server")
+logger = logging.getLogger("airllm-server")
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -34,7 +34,7 @@ PLATFORM_ROOT = Path(__file__).resolve().parent.parent.parent
 
 _airllm_available = False
 try:
-    sys.path.insert(0, str(PLATFORM_ROOT / "integrations" / "air_llm" / "air_llm"))
+    sys.path.insert(0, str(PLATFORM_ROOT / "intelligence_platform" / "Air-LLM" / "air_llm"))
     import airllm
     _airllm_available = True
     logger.info("Air-LLM library: AVAILABLE")
@@ -48,7 +48,7 @@ try:
     import importlib.util as _ilu
     _airllm_integ_spec = _ilu.spec_from_file_location(
         "airllm_integration",
-        str(PLATFORM_ROOT / "integrations" / "air_llm"
+        str(PLATFORM_ROOT / "intelligence_platform" / "Air-LLM"
             / "investment_platform_integration.py"),
     )
     _airllm_integ_mod = _ilu.module_from_spec(_airllm_integ_spec)
@@ -95,7 +95,7 @@ class AirLLMModelManager:
         if not _airllm_available:
             raise RuntimeError(
                 "Air-LLM library not installed. "
-                "Ensure integrations/air_llm/air_llm is on sys.path."
+                "Ensure intelligence_platform/Air-LLM/air_llm is on sys.path."
             )
 
         logger.info(f"Loading Air-LLM model: {self.model_id} ...")
@@ -225,7 +225,7 @@ def create_app():
         if not _airllm_available:
             raise HTTPException(
                 status_code=503,
-                detail="Air-LLM library not available. Install from integrations/air_llm/",
+                detail="Air-LLM library not available. Install from intelligence_platform/Air-LLM/",
             )
 
         try:

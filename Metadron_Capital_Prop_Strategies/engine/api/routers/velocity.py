@@ -9,7 +9,7 @@ import logging
 import asyncio
 import json
 
-logger = logging.getLogger("metadron.api.velocity")
+logger = logging.getLogger("metadron-api.velocity")
 router = APIRouter()
 
 _engine = None

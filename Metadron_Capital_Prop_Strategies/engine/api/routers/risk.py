@@ -13,7 +13,7 @@ import logging
 
 from engine.api.shared import get_broker, get_engine, get_beta, get_options, get_decision
 
-logger = logging.getLogger("metadron.api.risk")
+logger = logging.getLogger("metadron-api.risk")
 router = APIRouter()
 
 

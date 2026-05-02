@@ -1308,6 +1308,7 @@ class L7UnifiedExecutionSurface:
         ibkr_client_id: Optional[int] = None,
         ibkr_paper: bool = True,
         daily_target_pct: float = 0.05,
+        prometheus_registry: Optional[object] = None,
     ):
         self._log_dir = Path(log_dir or "logs/l7_execution")
         self._log_dir.mkdir(parents=True, exist_ok=True)
@@ -1338,27 +1339,31 @@ class L7UnifiedExecutionSurface:
         self._trade_log: deque[dict] = deque(maxlen=50_000)
 
         # --- Prometheus metrics (optional) ---
+        # Use a per-instance CollectorRegistry by default so tests can re-instantiate
+        # without hitting "Duplicated timeseries" on the global registry.
         self._prom = None
         try:
-            from prometheus_client import Counter, Gauge, Histogram, Summary
+            from prometheus_client import Counter, Gauge, Histogram, Summary, CollectorRegistry
+            self._prom_registry = prometheus_registry if prometheus_registry is not None else CollectorRegistry()
+            r = self._prom_registry
             self._prom = {
-                "orders_total": Counter("l7_orders_total", "Total orders submitted", ["product", "side", "algo"]),
-                "orders_filled": Counter("l7_orders_filled", "Orders filled", ["product", "algo"]),
-                "orders_rejected": Counter("l7_orders_rejected", "Orders rejected", ["reason"]),
-                "fill_latency": Histogram("l7_fill_latency_seconds", "Order fill latency", buckets=[0.1, 0.5, 1, 5, 30, 60, 300]),
-                "slippage_bps": Summary("l7_slippage_bps", "Realized slippage in bps", ["product"]),
-                "nav": Gauge("l7_nav_usd", "Current NAV"),
-                "gross_leverage": Gauge("l7_gross_leverage", "Gross leverage ratio"),
-                "net_leverage": Gauge("l7_net_leverage", "Net leverage ratio"),
-                "position_count": Gauge("l7_position_count", "Active positions"),
-                "daily_pnl": Gauge("l7_daily_pnl_usd", "Daily P&L"),
-                "risk_level": Gauge("l7_risk_level", "Risk level (0=NORMAL,1=ELEVATED,2=HIGH,3=CRITICAL)"),
-                "kill_switch": Gauge("l7_kill_switch_active", "Kill switch status (0/1)"),
-                "twap_orders": Counter("l7_twap_orders", "TWAP algo orders"),
-                "vwap_orders": Counter("l7_vwap_orders", "VWAP algo orders"),
-                "ibkr_connected": Gauge("l7_ibkr_connected", "IBKR connection status (0/1)"),
-                "tca_total_cost_bps": Summary("l7_tca_total_cost_bps", "TCA total cost per trade"),
-                "tca_implementation_shortfall": Summary("l7_tca_is_usd", "Implementation shortfall USD"),
+                "orders_total": Counter("l7_orders_total", "Total orders submitted", ["product", "side", "algo"], registry=r),
+                "orders_filled": Counter("l7_orders_filled", "Orders filled", ["product", "algo"], registry=r),
+                "orders_rejected": Counter("l7_orders_rejected", "Orders rejected", ["reason"], registry=r),
+                "fill_latency": Histogram("l7_fill_latency_seconds", "Order fill latency", buckets=[0.1, 0.5, 1, 5, 30, 60, 300], registry=r),
+                "slippage_bps": Summary("l7_slippage_bps", "Realized slippage in bps", ["product"], registry=r),
+                "nav": Gauge("l7_nav_usd", "Current NAV", registry=r),
+                "gross_leverage": Gauge("l7_gross_leverage", "Gross leverage ratio", registry=r),
+                "net_leverage": Gauge("l7_net_leverage", "Net leverage ratio", registry=r),
+                "position_count": Gauge("l7_position_count", "Active positions", registry=r),
+                "daily_pnl": Gauge("l7_daily_pnl_usd", "Daily P&L", registry=r),
+                "risk_level": Gauge("l7_risk_level", "Risk level (0=NORMAL,1=ELEVATED,2=HIGH,3=CRITICAL)", registry=r),
+                "kill_switch": Gauge("l7_kill_switch_active", "Kill switch status (0/1)", registry=r),
+                "twap_orders": Counter("l7_twap_orders", "TWAP algo orders", registry=r),
+                "vwap_orders": Counter("l7_vwap_orders", "VWAP algo orders", registry=r),
+                "ibkr_connected": Gauge("l7_ibkr_connected", "IBKR connection status (0/1)", registry=r),
+                "tca_total_cost_bps": Summary("l7_tca_total_cost_bps", "TCA total cost per trade", registry=r),
+                "tca_implementation_shortfall": Summary("l7_tca_is_usd", "Implementation shortfall USD", registry=r),
             }
             logger.info("L7: Prometheus metrics registered")
         except ImportError:

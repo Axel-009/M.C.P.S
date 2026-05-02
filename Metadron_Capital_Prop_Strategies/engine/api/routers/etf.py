@@ -7,7 +7,7 @@ from fastapi import APIRouter, Query
 from datetime import datetime, timedelta
 import logging
 
-logger = logging.getLogger("metadron.api.etf")
+logger = logging.getLogger("metadron-api.etf")
 router = APIRouter()
 
 # ─── Lazy singletons ──────────────────────────────────────────────
@@ -21,7 +21,7 @@ def _get_broker():
     if _broker is None:
         try:
             from engine.execution.alpaca_broker import AlpacaBroker
-            _broker = AlpacaBroker()  # legacy
+            _broker = AlpacaBroker()
         except Exception:
             from engine.execution.paper_broker import PaperBroker
             _broker = PaperBroker()

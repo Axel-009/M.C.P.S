@@ -242,19 +242,19 @@ except ImportError:
     get_meter = None
 
 try:
-    from Metadron_Capital_Prop_Strategies.plugins.gsd_paul_plugin import GSDPlugin, PaulPlugin
+    from intelligence_platform.plugins.gsd_paul_plugin import GSDPlugin, PaulPlugin
 except ImportError:
     try:
-        from Metadron_Capital_Prop_Strategies.plugins.gsd_paul_plugin import GSDPlugin, PaulPlugin
+        from ..intelligence_platform.plugins.gsd_paul_plugin import GSDPlugin, PaulPlugin
     except ImportError:
         GSDPlugin = None
         PaulPlugin = None
 
 try:
-    from Metadron_Capital_Prop_Strategies.plugins.gsd_workflow_bridge import GSDWorkflowBridge
+    from intelligence_platform.plugins.gsd_workflow_bridge import GSDWorkflowBridge
 except ImportError:
     try:
-        from Metadron_Capital_Prop_Strategies.plugins.gsd_workflow_bridge import GSDWorkflowBridge
+        from ..intelligence_platform.plugins.gsd_workflow_bridge import GSDWorkflowBridge
     except ImportError:
         GSDWorkflowBridge = None
 

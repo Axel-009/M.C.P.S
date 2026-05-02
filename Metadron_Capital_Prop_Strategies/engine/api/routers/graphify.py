@@ -26,7 +26,7 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, Query
 
-logger = logging.getLogger("metadron.api.graphify")
+logger = logging.getLogger("metadron-api.graphify")
 router = APIRouter()
 
 _graphify = None

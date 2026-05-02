@@ -22,7 +22,7 @@ from typing import Optional
 
 import numpy as np
 
-logger = logging.getLogger("metadron.intelligence.social_features")
+logger = logging.getLogger(__name__)
 
 
 @dataclass

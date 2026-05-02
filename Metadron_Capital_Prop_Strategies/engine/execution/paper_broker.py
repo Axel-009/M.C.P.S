@@ -4,7 +4,7 @@ PURPOSE:
     1. Backtesting — historical simulation with synthetic fills
     2. Futures — paper trading until Rithmic connection is live
 
-NOT for live equity/options trading — use IBKRBroker via L7.
+NOT for live equity/options trading — use AlpacaBroker.
 NOT for live futures — will use RithmicBroker (future build).
 
 Provides:

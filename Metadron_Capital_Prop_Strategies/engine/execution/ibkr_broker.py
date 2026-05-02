@@ -160,7 +160,7 @@ class IBKRBroker:
         self._risk_limiter = RiskLimiter(
             max_position_pct=0.10,
             max_sector_pct=0.30,
-            max_daily_loss_pct=0.03,
+            daily_loss_limit_pct=0.03,
             max_gross_exposure=2.5,
             max_net_exposure=1.5,
         )

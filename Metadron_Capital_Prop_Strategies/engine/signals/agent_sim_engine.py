@@ -19,11 +19,11 @@ from enum import Enum
 from datetime import datetime, timedelta
 import logging
 
-logger = logging.getLogger("metadron.signals.agent_sim")
+logger = logging.getLogger(__name__)
 
 # Import MiroFish simulator
 try:
-    from Metadron_Capital_Prop_Strategies.integrations.mirofish.investment_platform_integration import (
+    from intelligence_platform.MiroFish.investment_platform_integration import (
         MarketSimulator,
         AgentType,
         MarketAgent,

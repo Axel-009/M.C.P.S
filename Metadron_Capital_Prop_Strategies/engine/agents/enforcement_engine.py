@@ -37,7 +37,7 @@ try:
 except ImportError:
     np = None  # type: ignore
 
-logger = logging.getLogger("metadron.agents.enforcement")
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -85,7 +85,7 @@ class EnforcementEngine:
 
     Usage:
         from engine.agents.dynamic_agent_factory import DynamicAgentFactory
-        from Metadron_Capital_Prop_Strategies.plugins.gsd_paul_plugin import (
+        from intelligence_platform.plugins.gsd_paul_plugin import (
             GSDPlugin, PaulPlugin, AgentLearningWrapper,
         )
 

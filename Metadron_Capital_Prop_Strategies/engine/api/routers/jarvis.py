@@ -22,7 +22,7 @@ from fastapi import APIRouter, HTTPException, UploadFile, File
 from fastapi.responses import StreamingResponse, Response
 from pydantic import BaseModel
 
-logger = logging.getLogger("metadron.api.jarvis")
+logger = logging.getLogger("metadron-api.jarvis")
 router = APIRouter()
 
 

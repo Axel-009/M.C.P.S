@@ -20,14 +20,14 @@ from pathlib import Path
 from datetime import datetime, timezone
 from typing import Optional
 
-logger = logging.getLogger("metadron.bridges.ainewton_worker")
+logger = logging.getLogger("ainewton-worker")
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
 )
 
 PLATFORM_ROOT = Path(__file__).resolve().parent.parent.parent
-AINEWTON_PATH = PLATFORM_ROOT / "integrations" / "ai_newton"
+AINEWTON_PATH = PLATFORM_ROOT / "intelligence_platform" / "AI-Newton"
 DISCOVERIES_PATH = PLATFORM_ROOT / "data" / "discoveries"
 DISCOVERIES_PATH.mkdir(parents=True, exist_ok=True)
 
@@ -38,7 +38,7 @@ try:
     import importlib.util as _ilu
     _ainewton_spec = _ilu.spec_from_file_location(
         "ainewton_integration",
-        str(PLATFORM_ROOT / "integrations" / "ai_newton" / "investment_platform_integration.py"),
+        str(PLATFORM_ROOT / "intelligence_platform" / "AI-Newton" / "investment_platform_integration.py"),
     )
     _ainewton_mod = _ilu.module_from_spec(_ainewton_spec)
     _ainewton_spec.loader.exec_module(_ainewton_mod)

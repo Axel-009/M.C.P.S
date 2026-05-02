@@ -98,7 +98,7 @@ class DailySummaryGenerator:
 
         try:
             from engine.execution.alpaca_broker import AlpacaBroker
-            ab = AlpacaBroker(initial_cash=0, paper=True)  # legacy
+            ab = AlpacaBroker(initial_cash=0, paper=True)
             acct = ab.get_account() if hasattr(ab, "get_account") else {}
             if isinstance(acct, dict):
                 nav["ibkr_nav"] = float(acct.get("equity", 0))

@@ -96,19 +96,19 @@ STEP 5 — Update the shared.py BROKER SWAP NOTE
 IBKR BROKER STATUS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Legacy TradierBroker reference: # legacy
-    engine/execution/ibkr_broker.py
+Legacy TradierBroker reference:
+    engine/execution/tradier_broker.py
 
 It satisfies BrokerProtocol (same method surface as PaperBroker /
 IBKRBroker is the sole broker wired into L7UnifiedExecutionSurface.
 L7UnifiedExecutionSurface — there is no broker_type="ibkr" path in either
 class's __init__().
 
-To activate TradierBroker  # legacy, follow Step 3 above with:
+To activate TradierBroker, follow Step 3 above with:
 
     elif broker_type == "ibkr":
         from engine.execution.tradier_broker import TradierBroker
-        self.broker = TradierBroker  # legacy(initial_cash=initial_nav or 1_000_000.0)
+        self.broker = TradierBroker(initial_cash=initial_nav or 1_000_000.0)
 
 And set:
     METADRON_BROKER_TYPE=ibkr
@@ -200,7 +200,7 @@ class BrokerProtocol(Protocol):
 
     paper: bool
     """True when the broker is running in simulation mode (no real
-    orders sent to an exchange).  IBKRBroker exposes this as
+    orders sent to an exchange).  AlpacaBroker exposes this as
     ``self.paper = os.getenv("IBKR_PAPER_TRADE", "True") == "true"``.
     Used by get_broker_status() and the shared API singleton to label
     the active environment in dashboard headers."""
@@ -225,7 +225,7 @@ class BrokerProtocol(Protocol):
 
         AI NOTE:
             In PaperBroker this fills synchronously via MicroPriceModel.
-            In IBKRBroker this submits to the IBKR TWS Gateway, polls for fill
+            In AlpacaBroker this submits to the Alpaca SDK, polls for fill
             status (_poll_order_fill), then calls _sync_after_fill.
             A new broker must return an Order dataclass (from paper_broker.py)
             so that the ExecutionEngine pipeline logging stays consistent.
@@ -262,7 +262,7 @@ class BrokerProtocol(Protocol):
             realized_pnl, sector.
 
         AI NOTE:
-            IBKRBroker syncs positions from IBKR TWS on every call.
+            AlpacaBroker syncs positions from the Alpaca SDK on every call.
             A new live broker should do the same — query the exchange and
             update self.state.positions before returning.
         """
@@ -276,7 +276,7 @@ class BrokerProtocol(Protocol):
         """Recompute and return current Net Asset Value.
 
         cash + sum(position.quantity * current_price for each position).
-        IBKRBroker prefers the account equity from IBKR and
+        AlpacaBroker prefers the account equity from the Alpaca SDK and
         falls back to the local state calculation.
         """
         ...
@@ -372,7 +372,7 @@ class BrokerProtocol(Protocol):
         """Re-fetch current prices for all held positions and update state.
 
         PaperBroker uses OpenBB get_adj_close().
-        IBKRBroker uses IBKR market data feeds.
+        AlpacaBroker uses the Alpaca market data SDK (StockLatestBarRequest).
         A new broker should use whatever market data feed is cheapest/fastest
         for the target exchange.
         """
@@ -386,7 +386,7 @@ class BrokerProtocol(Protocol):
         """Reconcile local portfolio state against the exchange.
 
         PaperBroker does an internal position consistency check.
-        IBKRBroker compares local state against live IBKR account data.
+        AlpacaBroker compares local state against live IBKR account data.
         Returns a dict with keys: status, discrepancies, resolved_at.
 
         AI NOTE:

@@ -15,7 +15,7 @@ Architecture:
 Permission model:
     - jarvis: READ + SPEAK + RECOMMEND only
     - All write actions → blocked → converted to NanoClaw recommendations
-    - Same permission guard as NanoClaw/Ruflo
+    - Same permission guard as NanoClaw/OpenClaw/Ruflo
 
 PM2 process: jarvis-service (port 8006)
 """

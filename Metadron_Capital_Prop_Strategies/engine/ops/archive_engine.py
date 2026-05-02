@@ -63,7 +63,7 @@ class ArchiveEngine:
         # IBKRBroker
         try:
             from engine.execution.alpaca_broker import AlpacaBroker
-            ab = AlpacaBroker(initial_cash=0, paper=True)  # legacy
+            ab = AlpacaBroker(initial_cash=0, paper=True)
             ibkr_trades = ab.get_order_history() if hasattr(ab, "get_order_history") else []
             for t in ibkr_trades:
                 rec = dict(t) if isinstance(t, dict) else {}

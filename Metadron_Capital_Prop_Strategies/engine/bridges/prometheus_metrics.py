@@ -19,7 +19,7 @@ import time
 import logging
 from typing import Optional
 
-logger = logging.getLogger("metadron.bridges.prometheus")
+logger = logging.getLogger("prometheus-metrics")
 
 # ─── Prometheus Client Availability ────────────────────────────────
 
@@ -755,6 +755,9 @@ def _create_metrics(registry: "CollectorRegistry"):
         "Total NanoClaw chat messages processed",
         registry=registry,
     )
+    metrics["openclaw_recommendations_total"] = Counter(
+        "metadron_openclaw_recommendations_total",
+        "Total OpenClaw recommendation cards generated",
         registry=registry,
     )
     metrics["permission_guard_blocks_total"] = Counter(
@@ -1150,7 +1153,7 @@ def _collect_live_metrics(metrics: dict):
         broker_pos = {}
         try:
             from engine.execution.alpaca_broker import AlpacaBroker
-            ab = AlpacaBroker(initial_cash=0, paper=True)  # legacy
+            ab = AlpacaBroker(initial_cash=0, paper=True)
             broker_pos = ab.get_positions()
             ibkr_nav = ab.compute_nav()
         except Exception:

@@ -9,7 +9,7 @@ from fastapi import APIRouter, Query
 from datetime import datetime
 import logging
 
-logger = logging.getLogger("metadron.api.fixed-income")
+logger = logging.getLogger("metadron-api.fixed-income")
 router = APIRouter()
 
 _fi_engine = None

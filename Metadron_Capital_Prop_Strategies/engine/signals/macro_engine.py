@@ -43,7 +43,7 @@ try:
     _macro_ml_spec = _ilu.spec_from_file_location(
         "macro_ml_engine",
         str(__import__("pathlib").Path(__file__).resolve().parent.parent.parent
-            / "integrations" / "macro_ml" / "macro_ml_engine.py"),
+            / "intelligence_platform" / "ML-Macro-Market" / "macro_ml_engine.py"),
     )
     _macro_ml_mod = _ilu.module_from_spec(_macro_ml_spec)
     _macro_ml_spec.loader.exec_module(_macro_ml_mod)

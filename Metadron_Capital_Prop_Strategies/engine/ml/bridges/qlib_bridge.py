@@ -8,8 +8,8 @@ The bridge exposes:
     2. Backtest wrapper for walk-forward validation of engine signals
     3. Model adapter for consuming QLIB-trained models in MLVoteEnsemble
 
-Source repo: integrations/qlib (Microsoft QLIB framework)
-Provider adapter: integrations/qlib/qlib/data/openbb_universe.py
+Source repo: intelligence_platform/QLIB (Microsoft QLIB framework)
+Provider adapter: intelligence_platform/QLIB/qlib/data/openbb_universe.py
 
 Usage:
     from engine.ml.bridges.qlib_bridge import QLIBBridge
@@ -24,13 +24,13 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
-logger = logging.getLogger("metadron.intelligence.qlib")
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Intelligence Platform: QLIB integration
 # Provides: OpenBB providers for QLIB, backtest engine, model framework.
 # ---------------------------------------------------------------------------
-QLIB_BASE = Path(__file__).resolve().parent.parent.parent.parent / "integrations" / "qlib"
+QLIB_BASE = Path(__file__).resolve().parent.parent.parent.parent / "intelligence_platform" / "QLIB"
 
 try:
     import importlib.util as _ilu

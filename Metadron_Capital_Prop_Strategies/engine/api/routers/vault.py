@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-logger = logging.getLogger("metadron.api.vault")
+logger = logging.getLogger("metadron-api.vault")
 router = APIRouter()
 
 
@@ -112,9 +112,9 @@ async def vault_test_key(payload: VaultKeySet):
                 r = await client.get("https://paper-api.ibkr.markets/v2/account", headers=headers)
                 result["status"] = "valid" if r.status_code == 200 else f"error ({r.status_code})"
 
-        elif slot == "OPENROUTER_API_KEY":
+        elif slot == "XIAOMI_MIMO_API_KEY":
             result["status"] = "configured" if value else "empty"
-            result["note"] = "OpenRouter — connectivity test not available"
+            result["note"] = "Xiaomi Mimo V2 Pro — connectivity test not available"
 
         elif slot == "ZEP_API_KEY":
             result["status"] = "configured" if value else "empty"

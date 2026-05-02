@@ -16,7 +16,7 @@ from fastapi import APIRouter, Query
 from datetime import datetime, timedelta
 import logging
 
-logger = logging.getLogger("metadron.api.quant")
+logger = logging.getLogger("metadron-api.quant")
 router = APIRouter()
 
 # ---------------------------------------------------------------------------

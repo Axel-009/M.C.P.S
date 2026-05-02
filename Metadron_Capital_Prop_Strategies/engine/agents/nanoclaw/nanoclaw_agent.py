@@ -1,6 +1,6 @@
 """NanoClaw Agent — main operator agent for Metadron Capital.
 
-Wraps the Brain Power bridge (OpenRouter) to provide a
+Wraps the Brain Power bridge (Xiaomi Mimo V2 Pro) to provide a
 streaming conversational agent with system context awareness and
 permission-gated write actions.
 """
@@ -10,7 +10,7 @@ import logging
 from datetime import datetime
 from typing import AsyncGenerator
 
-logger = logging.getLogger("metadron.agents.nanoclaw.agent")
+logger = logging.getLogger("metadron-api.nanoclaw.agent")
 
 try:
     from engine.bridges.brain_power import BrainPowerClient
@@ -31,7 +31,7 @@ YOUR ROLE:
 - Execute operational instructions from AJ
 - Monitor system health
 - Coordinate Ruflo agents
-- Evaluate recommendations for AJ's review — never auto-execute them
+- Evaluate and flag CEO (OpenClaw) recommendations for AJ's review — never auto-execute them
 
 SYSTEM CONTEXT:
 {system_context}

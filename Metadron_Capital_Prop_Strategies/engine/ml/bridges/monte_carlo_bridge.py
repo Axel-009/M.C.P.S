@@ -15,7 +15,7 @@ except Exception:
         MC_BUY = "MC_BUY"
         MC_SELL = "MC_SELL"
 
-logger = logging.getLogger("metadron.intelligence.monte_carlo_bridge")
+logger = logging.getLogger(__name__)
 
 
 class MonteCarloBridge:

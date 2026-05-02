@@ -53,14 +53,14 @@ except ImportError:
     }
 
 # ---------------------------------------------------------------------------
-# FRB (Federal Reserve Bank) Python client — integrations/frb
+# FRB (Federal Reserve Bank) Python client — intelligence_platform/FRB
 # Provides direct FRED API access as alternative/supplement to OpenBB FRED.
 # ---------------------------------------------------------------------------
 try:
     import importlib.util as _ilu
     import sys as _sys
     _frb_root = str(__import__("pathlib").Path(__file__).resolve().parent.parent.parent
-                     / "integrations" / "frb")
+                     / "intelligence_platform" / "FRB")
     if _frb_root not in _sys.path:
         _sys.path.insert(0, _frb_root)
     from fred import Fred as FRBFredClient

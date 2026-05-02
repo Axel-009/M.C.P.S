@@ -59,7 +59,7 @@ except ImportError:
         "Communication Services": ["META", "GOOGL", "GOOG", "NFLX", "DIS", "CMCSA", "T", "VZ", "TMUS", "CHTR"],
     }
 
-logger = logging.getLogger("metadron.monitoring.sector_tracker")
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Constants

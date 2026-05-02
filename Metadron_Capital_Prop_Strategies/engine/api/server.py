@@ -52,7 +52,7 @@ from engine.api.routers import (
 )
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [API] %(message)s")
-logger = logging.getLogger("metadron.api.server")
+logger = logging.getLogger("metadron-api")
 
 try:
     from engine.api.routers import allocation

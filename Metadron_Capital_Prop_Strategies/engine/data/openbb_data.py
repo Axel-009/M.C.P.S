@@ -16,7 +16,7 @@ from functools import lru_cache
 import numpy as np
 import pandas as pd
 
-logger = logging.getLogger("metadron.data.openbb")
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # OpenBB SDK import with graceful fallback

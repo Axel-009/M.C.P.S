@@ -22,7 +22,7 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-logger = logging.getLogger("metadron.bridges.qwen_server")
+logger = logging.getLogger("qwen-server")
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",

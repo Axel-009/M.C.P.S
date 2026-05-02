@@ -10,7 +10,7 @@ import logging
 from datetime import datetime
 from typing import List, Optional, Tuple
 
-logger = logging.getLogger("metadron.monitoring.live_earnings")
+logger = logging.getLogger(__name__)
 
 try:
     import numpy as np

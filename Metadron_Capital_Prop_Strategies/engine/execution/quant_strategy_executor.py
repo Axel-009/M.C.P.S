@@ -22,7 +22,7 @@ Pipeline position:
         ↓
     Weighted consensus → size adjustment → risk gates → exchange-core
 
-Source: integrations/quant_trading (je-suis-tm strategies)
+Source: intelligence_platform/quant-trading (je-suis-tm strategies)
 """
 
 import logging
@@ -31,7 +31,7 @@ import pandas as pd
 from dataclasses import dataclass, field
 from typing import Optional
 
-logger = logging.getLogger("metadron.execution.quant_strategy")
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Intelligence Platform: quant-trading sub-repo integration
@@ -45,7 +45,7 @@ try:
     _arb_spec = _ilu.spec_from_file_location(
         "arbitrage_detector",
         str(__import__("pathlib").Path(__file__).resolve().parent.parent.parent
-            / "integrations" / "quant_trading" / "arbitrage_detector.py"),
+            / "intelligence_platform" / "quant-trading" / "arbitrage_detector.py"),
     )
     _arb_mod = _ilu.module_from_spec(_arb_spec)
     _arb_spec.loader.exec_module(_arb_mod)
@@ -60,7 +60,7 @@ try:
     _us_spec = _ilu.spec_from_file_location(
         "universe_scanner",
         str(__import__("pathlib").Path(__file__).resolve().parent.parent.parent
-            / "integrations" / "quant_trading" / "universe_scanner.py"),
+            / "intelligence_platform" / "quant-trading" / "universe_scanner.py"),
     )
     _us_mod = _ilu.module_from_spec(_us_spec)
     _us_spec.loader.exec_module(_us_mod)
@@ -488,7 +488,7 @@ class ArbitrageStrategy:
 
     Types: statistical arb, index arb, cross-asset relative value.
     Simplified for execution-time signals (full detector in
-    integrations/quant_trading/arbitrage_detector.py).
+    intelligence_platform/quant-trading/arbitrage_detector.py).
     """
 
     def run(self, prices_a: pd.Series, prices_b: pd.Series,

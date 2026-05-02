@@ -42,7 +42,7 @@ except ImportError:
         CRASH = "CRASH"
 
 
-logger = logging.getLogger("metadron.agents.scorecard")
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------

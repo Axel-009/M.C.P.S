@@ -58,7 +58,7 @@ try:
     _dp_spec = _ilu.spec_from_file_location(
         "distress_prediction",
         str(__import__("pathlib").Path(__file__).resolve().parent.parent.parent
-            / "integrations" / "distress" / "financial_distress_prediction"
+            / "intelligence_platform" / "FinancialDistressPrediction"
             / "distress_prediction_engine.py"),
     )
     _dp_mod = _ilu.module_from_spec(_dp_spec)
@@ -74,7 +74,7 @@ try:
     _ca_spec = _ilu.spec_from_file_location(
         "credit_analysis",
         str(__import__("pathlib").Path(__file__).resolve().parent.parent.parent
-            / "integrations" / "distress" / "financial_distressed_repo"
+            / "intelligence_platform" / "financial-distressed-repo"
             / "credit_analysis_engine.py"),
     )
     _ca_mod = _ilu.module_from_spec(_ca_spec)
@@ -90,7 +90,7 @@ try:
     _ds_spec = _ilu.spec_from_file_location(
         "distress_scanner",
         str(__import__("pathlib").Path(__file__).resolve().parent.parent.parent
-            / "integrations" / "distress" / "sophisticated_distress"
+            / "intelligence_platform" / "sophisticated-distress-analysis"
             / "distress_scanner.py"),
     )
     _ds_mod = _ilu.module_from_spec(_ds_spec)
@@ -1205,7 +1205,7 @@ class DistressedAssetEngine:
         """
         Compute Springate S-Score via FinancialDistressPrediction engine.
 
-        The Springate model is only available in the integrations
+        The Springate model is only available in the intelligence_platform
         sub-repo — it is not duplicated in this engine.
         """
         if DISTRESS_PREDICTION_AVAILABLE and DistressPredictionEngine is not None:
