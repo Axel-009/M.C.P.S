@@ -179,7 +179,7 @@ const LAYERS: Layer[] = [
       { name: "ExecutionEngine", file: "execution_engine.py", model: "2-layer neural net (NumPy), Monte Carlo voter, TWAP/VWAP", type: "Neural Net", status: "ACTIVE", usage: usageForType("Neural Net", 0) },
       { name: "L7UnifiedExecutionSurface", file: "l7_unified_execution_surface.py", model: "Unified execution routing", type: "Rule-Based", status: "ACTIVE", usage: usageForType("Rule-Based", 0) },
       { name: "OptionsEngine", file: "options_engine.py", model: "Black-Scholes-Merton pricing + Greeks", type: "Statistical", status: "ACTIVE", usage: usageForType("Statistical", 0) },
-      { name: "AlpacaBroker", file: "alpaca_broker.py", model: "Alpaca API execution", type: "Framework", status: "ACTIVE", usage: usageForType("Framework", 0) },
+      { name: "IBKRBroker", file: "ibkr_broker.py", model: "IBKR (ib_insync) execution", type: "Framework", status: "ACTIVE", usage: usageForType("Framework", 0) },
       { name: "PaperBroker", file: "paper_broker.py", model: "Paper trading simulation", type: "Rule-Based", status: "ACTIVE", usage: usageForType("Rule-Based", 1) },
       { name: "ExchangeCoreEngine", file: "exchange_core_engine.py", model: "Order matching", type: "Rule-Based", status: "ACTIVE", usage: usageForType("Rule-Based", 2) },
       { name: "QuantStrategyExecutor", file: "quant_strategy_executor.py", model: "Strategy execution", type: "Rule-Based", status: "ACTIVE", usage: usageForType("Rule-Based", 3) },

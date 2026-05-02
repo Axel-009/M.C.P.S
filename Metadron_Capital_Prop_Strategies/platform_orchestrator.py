@@ -1215,19 +1215,13 @@ class InvestmentPlatformOrchestrator:
         risk_limits: Optional[RiskLimits] = None,
         cube_weights: Optional[dict[SignalType, float]] = None,
     ) -> None:
-        # Dynamic NAV: pull from Alpaca if available
+        # Dynamic NAV: pull from IBKR if available
         if nav is None:
             try:
-                from engine.execution.alpaca_broker import AlpacaBroker
-                import os
-                api_key = os.environ.get("ALPACA_API_KEY", "")
-                secret_key = os.environ.get("ALPACA_SECRET_KEY", "")
-                if api_key and secret_key:
-                    broker = AlpacaBroker(initial_cash=0, api_key=api_key, secret_key=secret_key, paper=True)
-                    nav = broker.get_nav()
-                    logger.info("Orchestrator NAV from Alpaca: $%,.2f", nav)
-                else:
-                    nav = 1_000_000.0
+                from engine.execution.ibkr_broker import IBKRBroker
+                broker = IBKRBroker(initial_cash=0, paper=True)
+                nav = broker.get_nav() if hasattr(broker, "get_nav") else 1_000_000.0
+                logger.info("Orchestrator NAV from IBKR: $%,.2f", nav)
             except Exception:
                 nav = 1_000_000.0
         self.nav = nav
@@ -1306,7 +1300,7 @@ class InvestmentPlatformOrchestrator:
 
         Pipeline: UniverseEngine → MacroEngine → MetadronCube → SecurityAnalysis
                   → PatternDiscovery → AlphaOptimizer → BetaCorridor
-                  → DecisionMatrix → ExecutionEngine → AlpacaBroker
+                  → DecisionMatrix → ExecutionEngine → IBKRBroker
 
         Fallback: Uses internal analyzers if engine modules are unavailable.
         """

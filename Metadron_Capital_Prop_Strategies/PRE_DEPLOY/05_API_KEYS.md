@@ -12,19 +12,18 @@ from the browser — they deploy immediately to the engines, no restart needed.
 
 ## 5.2 Required API Keys
 
-### Alpaca (Trade Execution) — REQUIRED
+### IBKR (Trade Execution) — REQUIRED
 
-1. Go to https://app.alpaca.markets
-2. Sign up for a paper trading account (free)
-3. Go to **Paper Trading** → **API Keys** → **Generate**
-4. Copy both the **API Key** and **Secret Key**
+1. Run TWS or IB Gateway (paper or live) on the Hetzner host (or via WireGuard)
+2. Set the following in `.env`:
 
-In the VAULT tab, set:
-- `ALPACA_API_KEY` → paste your API key
-- `ALPACA_SECRET_KEY` → paste your secret key
-- `ALPACA_PAPER_TRADE` → `True` (for paper trading) or `False` (for live)
+- `IBKR_HOST` → host running TWS/Gateway (default `127.0.0.1`)
+- `IBKR_PORT` → `7497` for paper, `7496` for live
+- `IBKR_CLIENT_ID` → integer (default `1`)
+- `IBKR_PAPER` → `True` for paper, `False` for live
 
-**WARNING**: Setting `ALPACA_PAPER_TRADE=False` means REAL MONEY. Be certain.
+**WARNING**: Setting `IBKR_PAPER=False` and pointing at the live port means REAL MONEY. Be certain.
+
 
 ### FMP (Market Data) — REQUIRED
 
@@ -73,7 +72,7 @@ authentication. You'll see it in the VAULT tab as "auto".
 In the VAULT tab:
 1. Click **TEST** next to each key you've set
 2. FMP should show "valid" (it tests a live API call)
-3. Alpaca should show "valid" (it tests account access)
+3. IBKR should show "valid" (it tests account access)
 4. Xiaomi will show "configured" (no live test available)
 
 ## 5.5 Alternative: Set Keys via .env
@@ -84,9 +83,10 @@ If you prefer not to use the VAULT tab, set keys in `.env.production`:
 nano /opt/metadron/.env.production
 
 # Add your keys:
-ALPACA_API_KEY=PKxxxxxxxxxxxxxxxx
-ALPACA_SECRET_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-ALPACA_PAPER_TRADE=True
+IBKR_HOST=127.0.0.1
+IBKR_PORT=7497
+IBKR_CLIENT_ID=1
+IBKR_PAPER=True
 FMP_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 XIAOMI_MIMO_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxx
 ```

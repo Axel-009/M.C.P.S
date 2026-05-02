@@ -97,9 +97,9 @@ class DailySummaryGenerator:
             logger.debug(f"Paper NAV unavailable: {e}")
 
         try:
-            from engine.execution.alpaca_broker import AlpacaBroker
-            ab = AlpacaBroker(initial_cash=0, paper=True)
-            acct = ab.get_account() if hasattr(ab, "get_account") else {}
+            from engine.execution.ibkr_broker import IBKRBroker
+            ib = IBKRBroker(initial_cash=0, paper=True)
+            acct = ib.get_account() if hasattr(ib, "get_account") else {}
             if isinstance(acct, dict):
                 nav["ibkr_nav"] = float(acct.get("equity", 0))
                 nav["cash"] = float(acct.get("cash", 0))

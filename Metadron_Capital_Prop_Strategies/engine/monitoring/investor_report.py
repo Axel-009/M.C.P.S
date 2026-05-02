@@ -31,10 +31,10 @@ import numpy as np
 # Optional engine imports — all guarded
 # ---------------------------------------------------------------------------
 try:
-    from ..brokers.alpaca_broker import AlpacaBroker
+    from ..execution.ibkr_broker import IBKRBroker
     _BROKER_OK = True
 except ImportError:
-    AlpacaBroker = None  # type: ignore
+    IBKRBroker = None  # type: ignore
     _BROKER_OK = False
 
 try:
@@ -275,7 +275,7 @@ class InvestorReportGenerator:
         self._live_nav = None
         if _BROKER_OK:
             try:
-                broker = AlpacaBroker()
+                broker = IBKRBroker()
                 summary = broker.get_portfolio_summary()
                 self._live_nav = summary.get("portfolio_value") or summary.get("nav")
             except Exception:
@@ -293,7 +293,7 @@ class InvestorReportGenerator:
         lines.append(_center(f"{self._ph.period_start}  \u2014  {self._ph.period_end}"))
         lines.append(_hline("-"))
         if not _BROKER_OK:
-            lines.append("  [!] AlpacaBroker unavailable \u2014 using deterministic placeholder data")
+            lines.append("  [!] IBKRBroker unavailable \u2014 using deterministic placeholder data")
         if not _MACRO_OK:
             lines.append("  [!] MacroEngine unavailable \u2014 macro data estimated")
 

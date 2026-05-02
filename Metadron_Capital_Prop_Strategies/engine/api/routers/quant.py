@@ -99,7 +99,7 @@ def _fetch_ohlcv(ticker: str, days: int = 120):
 
     # IBKRBroker fallback
     try:
-        from engine.data.alpaca_data import get_bars
+        from engine.data.openbb_data import get_prices as get_bars
         df = get_bars(ticker, start=start, end=end)
         if df is not None and not df.empty:
             return df
@@ -185,7 +185,7 @@ async def quant_universe():
             except Exception:
                 # IBKRBroker fallback
                 try:
-                    from engine.data.alpaca_data import get_latest_price
+                    from engine.data.openbb_data import get_quote as get_latest_price
                     p = get_latest_price(ticker)
                     if p and p > 0:
                         entry["price"] = round(p, 2)

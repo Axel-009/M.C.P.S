@@ -71,21 +71,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check for stale Alpaca/Tradier refs in active code
+      - name: Check for stale Alpaca refs (must be zero — IBKR is sole broker)
         run: |
-          count=$(grep -rn "Alpaca\|Tradier" engine/ --include="*.py" \
+          count=$(grep -rn -i "alpaca" engine/ --include="*.py" \
             | grep -v __pycache__ \
-            | grep -v "alpaca_broker.py\|tradier_broker.py" \
-            | grep -v "import\|from.*broker\|AlpacaBroker\|TradierBroker" \
+            | wc -l)
+          echo "Alpaca refs in engine/: $count"
+          if [ "$count" -gt 0 ]; then
+            echo "::error::Found $count Alpaca references in active code (must be 0)"
+            grep -rn -i "alpaca" engine/ --include="*.py" | grep -v __pycache__
+            exit 1
+          fi
+
+      - name: Check for stale Tradier refs in active code
+        run: |
+          count=$(grep -rn "Tradier" engine/ --include="*.py" \
+            | grep -v __pycache__ \
+            | grep -v "tradier_broker.py" \
+            | grep -v "import\|from.*broker\|TradierBroker" \
             | grep -v "DEPRECATED" \
             | wc -l)
-          echo "Stale Alpaca/Tradier refs: $count"
+          echo "Stale Tradier refs: $count"
           if [ "$count" -gt 0 ]; then
             echo "::warning::Found $count stale broker references in active code"
-            grep -rn "Alpaca\|Tradier" engine/ --include="*.py" \
+            grep -rn "Tradier" engine/ --include="*.py" \
               | grep -v __pycache__ \
-              | grep -v "alpaca_broker.py\|tradier_broker.py" \
-              | grep -v "import\|from.*broker\|AlpacaBroker\|TradierBroker" \
+              | grep -v "tradier_broker.py" \
+              | grep -v "import\|from.*broker\|TradierBroker" \
               | grep -v "DEPRECATED"
           fi
 

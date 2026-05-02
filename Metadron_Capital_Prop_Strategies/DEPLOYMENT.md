@@ -28,7 +28,7 @@ Covers fresh Contabo VPS provisioning through to a fully running, monitored prod
 | **CPU** | 8 vCPU | 12+ vCPU (AMD EPYC) | ML walk-forward, signal pipeline, 1,000+ securities universe |
 | **RAM** | 32 GB | 64 GB | Full universe in memory, pandas/numpy DataFrames, model state, Qwen 2.5-7B inference |
 | **Disk** | 400 GB NVMe | 800 GB NVMe | Repo (~3 GB), intelligence_platform (~16K files), market data cache, model artifacts, logs, Prometheus TSDB |
-| **Network** | 200 Mbit/s | 400+ Mbit/s | Real-time market data feeds (OpenBB, Alpaca), LLM API calls, Grafana dashboards |
+| **Network** | 200 Mbit/s | 400+ Mbit/s | Real-time market data feeds (OpenBB, IBKR), LLM API calls, Grafana dashboards |
 | **OS** | Ubuntu 22.04 LTS | Ubuntu 22.04 LTS | Long-term support, Docker-native |
 
 **Recommended plan**: Contabo Cloud VPS XL or higher (12 vCPU, 64 GB RAM, 800 GB NVMe, ~$35-50/mo).
@@ -986,9 +986,9 @@ docker compose ps
 | Variable | Service | Description | Example | Required |
 |----------|---------|-------------|---------|----------|
 | `ANTHROPIC_API_KEY` | Engine API, LLM Bridge, Agents | Anthropic Claude API key for all LLM inference | `sk-ant-api03-...` | **Yes** |
-| `ALPACA_API_KEY` | Engine API (Alpaca Broker) | Alpaca brokerage API key | `PK...` | Yes (for live/paper trading) |
-| `ALPACA_SECRET_KEY` | Engine API (Alpaca Broker) | Alpaca brokerage secret key | `...` | Yes (for live/paper trading) |
-| `ALPACA_PAPER_TRADE` | Engine API (Alpaca Broker) | Enable paper trading mode | `True` | Yes |
+| `IBKR_HOST` | Engine API (IBKR Broker) | IBKR brokerage API key | `PK...` | Yes (for live/paper trading) |
+| `IBKR_PORT` | Engine API (IBKR Broker) | IBKR brokerage secret key | `...` | Yes (for live/paper trading) |
+| `IBKR_CLIENT_ID` | Engine API (IBKR Broker) | Enable paper trading mode | `True` | Yes |
 | `OPENBB_TOKEN` | Engine API (Data Layer) | OpenBB Hub token for premium data providers | `eyJ...` | Recommended |
 | `ZEP_API_KEY` | MiroFish, Agents | Zep memory graph API key | `z_...` | Optional |
 | `TRADIER_API_KEY` | Engine API (Tradier Broker) | Legacy Tradier API key | `...` | No (legacy) |
@@ -1179,7 +1179,7 @@ docker compose stop backend
 curl -s http://localhost:8001/api/engine/cube/status | python3 -m json.tool
 
 # Force paper-only mode
-echo "ALPACA_PAPER_TRADE=True" >> .env
+echo "IBKR_CLIENT_ID=True" >> .env
 pm2 restart engine-api
 ```
 

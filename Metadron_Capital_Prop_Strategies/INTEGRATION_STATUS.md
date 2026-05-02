@@ -59,7 +59,7 @@ The Metadron Capital quant fund platform is fully integrated across all layers. 
 | Engine | Status | Connection |
 |---|---|---|
 | ExecutionEngine | ✅ Working | Main pipeline orchestrator |
-| AlpacaBroker | ✅ Working | Primary broker, paper mode |
+| IBKRBroker | ✅ Working | Primary broker, paper mode |
 | PaperBroker | ✅ Working | Backtesting + futures paper |
 | L7UnifiedExecutionSurface | ✅ Working | Multi-product routing |
 | QuantStrategyExecutor | ✅ Working | 12 HFT strategies |
@@ -102,7 +102,7 @@ The Metadron Capital quant fund platform is fully integrated across all layers. 
 
 ```
 Market Hours:
-  Alpaca (real-time, 2-5s) → Pipeline (15-60s) → AlpacaBroker → Execution
+  IBKR (real-time, 2-5s) → Pipeline (15-60s) → IBKRBroker → Execution
   
 After Close:
   OpenBB (historical + FRED) → Backtesting → Model Retrain → Pattern Learning
@@ -121,7 +121,7 @@ Heartbeat:
 
 | Broker | Purpose | Status |
 |---|---|---|
-| AlpacaBroker | PRIMARY: Equities + Options | ✅ Connected (paper) |
+| IBKRBroker | PRIMARY: Equities + Options | ✅ Connected (paper) |
 | PaperBroker | Backtesting + Futures paper | ✅ Working |
 | TradierBroker | Legacy fallback | ✅ Available |
 | RithmicBroker | Future: Live futures | 🔴 Not built |
@@ -130,7 +130,7 @@ Heartbeat:
 
 ## WHAT'S NEW (This Session)
 
-1. **AlpacaBroker** — Full broker implementation, same interface as Tradier/Paper
+1. **IBKRBroker** — Full broker implementation, same interface as Tradier/Paper
 2. **AgentSimEngine** — MiroFish agent-based market microstructure simulation
 3. **MonteCarloRiskEngine** — VaR, CVaR, stress testing (1,000 MC paths)
 4. **BlackScholesEngine** — Option pricing, Greeks, IV solver, MC pricing

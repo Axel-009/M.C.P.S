@@ -689,7 +689,7 @@ export default function QuantToolsPage() {
           {ohlcv.length === 0 && (
             <DashboardPanel title="PRICE DATA" className="h-24 flex-shrink-0">
               <div className="flex items-center justify-center h-full text-terminal-text-faint text-[11px]">
-                Fetching live OHLCV data from OpenBB / Alpaca...
+                Fetching live OHLCV data from OpenBB / IBKR...
               </div>
             </DashboardPanel>
           )}

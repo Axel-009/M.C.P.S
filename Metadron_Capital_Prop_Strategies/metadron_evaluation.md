@@ -3,7 +3,7 @@
 **Date:** April 14, 2026  
 **Classification:** Technical Evaluation — Engineering Audience  
 **Test Status:** 159/159 passing (April 11, 2026)  
-**Platform Mode:** Paper Trading (Alpaca)  
+**Platform Mode:** Paper Trading (IBKR)  
 **Confidential — For internal engineering review only**
 
 ---
@@ -29,7 +29,7 @@
 
 ## 1. Executive Summary
 
-Metadron Capital is an AI-powered quantitative hedge fund platform designed to compound a $1,000 paper-trading account to $100,000 in 100 days — requiring an approximate 4.6% daily compound return. The platform currently operates in paper-trading mode via Alpaca, with infrastructure wired for live execution.
+Metadron Capital is an AI-powered quantitative hedge fund platform designed to compound a $1,000 paper-trading account to $100,000 in 100 days — requiring an approximate 4.6% daily compound return. The platform currently operates in paper-trading mode via IBKR, with infrastructure wired for live execution.
 
 This report evaluates the full 7-phase architecture: Data Ingestion, Signal Generation, Intelligence & ML, Decision & Allocation, Execution, Learning, and Monitoring. Each phase is assessed for design quality, orchestration discipline, fault tolerance, and practical readiness. The evaluation also examines inter-phase orchestration via the `LiveLoopOrchestrator`, feedback loops, cadence alignment, and known gaps as of April 14, 2026.
 
@@ -278,9 +278,9 @@ Phase 4 triggers on signal delta and routes through two paths.
 Phase 5 handles order routing upon approval.
 
 **Standard path:**
-- Equity → WonderTrader micro-price → ExchangeCore → Alpaca
-- Option → OptionsEngine Greeks → Alpaca
-- Future → BetaCorridor → Alpaca
+- Equity → WonderTrader micro-price → ExchangeCore → IBKR
+- Option → OptionsEngine Greeks → IBKR
+- Future → BetaCorridor → IBKR
 
 **Direct/high-conviction bypass paths:**
 
@@ -538,7 +538,7 @@ The LLM integration (NanoClaw/Brain Power) is in stub mode due to missing API ke
 
 ### [HIGH] Rithmic Futures Not Built
 
-Futures execution path (BetaCorridor → Alpaca) cannot route to Rithmic. Futures instruments (ES, NQ, YM, RTY, VX, ZN, ZB) listed in Phase 1 cannot be traded. This removes hedging and direct volatility exposure capabilities.
+Futures execution path (BetaCorridor → IBKR) cannot route to Rithmic. Futures instruments (ES, NQ, YM, RTY, VX, ZN, ZB) listed in Phase 1 cannot be traded. This removes hedging and direct volatility exposure capabilities.
 
 ### [HIGH] FullUniverseScan Async Unconfirmed
 

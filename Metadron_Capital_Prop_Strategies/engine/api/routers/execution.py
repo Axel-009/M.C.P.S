@@ -73,8 +73,8 @@ async def reconciliation():
         broker_pos = {}
         ibkr_nav = 0
         try:
-            from engine.execution.alpaca_broker import AlpacaBroker
-            alpaca = AlpacaBroker(initial_cash=0, paper=True)
+            from engine.execution.ibkr_broker import IBKRBroker
+            ibkr = IBKRBroker(initial_cash=0, paper=True)
             broker_pos = ibkr.get_positions()
             ibkr_nav = ibkr.compute_nav()
         except Exception:
@@ -538,7 +538,7 @@ async def algo_comparison():
 async def nav_history():
     """NAV history for reconciliation (paper vs live broker).
 
-    Fits in system: L5 PaperBroker + AlpacaBroker → NAV comparison.
+    Fits in system: L5 PaperBroker + IBKRBroker → NAV comparison.
     """
     try:
         eng = get_engine()

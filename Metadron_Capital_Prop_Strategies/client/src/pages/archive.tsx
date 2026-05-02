@@ -24,7 +24,7 @@ interface DailySummary {
   nav: {
     portfolio_nav: number;
     paper_nav: number;
-    alpaca_nav: number;
+    ibkr_nav: number;
     nav_delta: number;
     cash: number;
   };

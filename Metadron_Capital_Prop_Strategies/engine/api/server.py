@@ -213,9 +213,9 @@ async def health_providers():
     ibkr_status = {"configured": bool(ibkr_key and ibkr_secret), "live": False, "error": None}
     if ibkr_key and ibkr_secret:
         try:
-            from alpaca.trading.client import TradingClient
-            client = TradingClient(ibkr_key, ibkr_secret, paper=True)
-            acct = client.get_account()
+            from engine.execution.ibkr_broker import IBKRBroker
+            ib = IBKRBroker(initial_cash=0, paper=True)
+            acct = ib.get_account() if hasattr(ib, "get_account") else None
             ibkr_status["live"] = bool(acct)
         except ImportError:
             ibkr_status["error"] = "ib_insync not installed"

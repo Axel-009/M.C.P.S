@@ -99,108 +99,19 @@ def set_data_source_mode(mode: str):
 
 
 # ---------------------------------------------------------------------------
-# IBKRBroker Data API — direct client for real-time equity prices during market hours
+# IBKR Data API — direct path disabled. Equity prices flow via OpenBB (sole
+# data source per design rule #1). Real-time intraday quotes during market
+# hours are obtained through engine.execution.ibkr_broker (ib_insync) when
+# the trading session is active; this module focuses on OpenBB for OHLCV.
 # ---------------------------------------------------------------------------
 _ibkr_data_client = None
 _IBKR_DATA_AVAILABLE = False
 
-try:
-    import os
-    from pathlib import Path as _Path
-    try:
-        from dotenv import load_dotenv as _load_dotenv
-        _env_path = _Path(__file__).parent.parent.parent / ".env"
-        if _env_path.exists():
-            _load_dotenv(_env_path)
-    except ImportError:
-        pass
-
-    _ibkr_key = os.environ.get("IBKR_API_KEY", "")
-    _ibkr_secret = os.environ.get("IBKR_SECRET_KEY", "")
-    if _ibkr_key and _ibkr_secret:
-        from alpaca.data.historical.stock import StockHistoricalDataClient
-        from alpaca.data.requests import StockBarsRequest, StockLatestTradeRequest
-        from alpaca.data.timeframe import TimeFrame
-        _ibkr_data_client = StockHistoricalDataClient(_ibkr_key, _ibkr_secret)
-        _IBKR_DATA_AVAILABLE = True
-        logger.info("IBKR Data API available — real-time equity prices during market hours")
-except ImportError:
-    logger.debug("ib_insync not installed — IBKR data path disabled")
-except Exception as e:
-    logger.debug("IBKR data client init failed: %s", e)
-
 
 def _fetch_ibkr_bars(tickers: list[str], start: str, end: Optional[str],
                        interval: str) -> pd.DataFrame:
-    """Fetch OHLCV bars directly from IBKRBroker Data API.
-
-    Returns DataFrame in the same format as OpenBB for seamless substitution.
-    """
-    if not _IBKR_DATA_AVAILABLE or not _ibkr_data_client:
-        return pd.DataFrame()
-
-    try:
-        # Map interval string to IBKRBroker TimeFrame
-        tf_map = {
-            "1d": TimeFrame.Day, "1D": TimeFrame.Day,
-            "1h": TimeFrame.Hour, "1H": TimeFrame.Hour,
-            "1min": TimeFrame.Minute, "1m": TimeFrame.Minute,
-        }
-        timeframe = tf_map.get(interval, TimeFrame.Day)
-
-        request = StockBarsRequest(
-            symbol_or_symbols=tickers,
-            start=pd.Timestamp(start).to_pydatetime(),
-            end=pd.Timestamp(end).to_pydatetime() if end else None,
-            timeframe=timeframe,
-        )
-        bars = _ibkr_data_client.get_stock_bars(request)
-        df = bars.df if hasattr(bars, "df") else pd.DataFrame()
-        if df.empty:
-            return pd.DataFrame()
-
-        # Normalize IBKRBroker output to match OpenBB schema
-        # IBKRBroker returns MultiIndex (symbol, timestamp) with columns: open, high, low, close, volume, ...
-        if isinstance(df.index, pd.MultiIndex):
-            # Multi-ticker: pivot to flat format per ticker
-            frames = {}
-            for ticker in tickers:
-                try:
-                    tdf = df.xs(ticker, level="symbol") if "symbol" in df.index.names else df
-                    tdf = tdf[["open", "high", "low", "close", "volume"]].copy()
-                    tdf.columns = ["Open", "High", "Low", "Close", "Volume"]
-                    tdf["Adj Close"] = tdf["Close"]
-                    frames[ticker] = tdf
-                except (KeyError, Exception):
-                    continue
-
-            if not frames:
-                return pd.DataFrame()
-
-            if len(frames) == 1:
-                result = list(frames.values())[0]
-                result.columns = pd.MultiIndex.from_tuples(
-                    [(c, tickers[0]) for c in result.columns]
-                )
-                return result
-
-            parts = []
-            for ticker, tdf in frames.items():
-                tdf.columns = pd.MultiIndex.from_tuples([(c, ticker) for c in tdf.columns])
-                parts.append(tdf)
-            return pd.concat(parts, axis=1)
-        else:
-            # Single ticker flat
-            df = df[["open", "high", "low", "close", "volume"]].copy()
-            df.columns = ["Open", "High", "Low", "Close", "Volume"]
-            df["Adj Close"] = df["Close"]
-            ticker = tickers[0]
-            df.columns = pd.MultiIndex.from_tuples([(c, ticker) for c in df.columns])
-            return df
-
-    except Exception as e:
-        logger.warning("IBKR bars fetch failed: %s", e)
-        return pd.DataFrame()
+    """Stub — IBKR direct data path is disabled. Falls back to OpenBB."""
+    return pd.DataFrame()
 
 
 def _use_ibkr_for_prices() -> bool:

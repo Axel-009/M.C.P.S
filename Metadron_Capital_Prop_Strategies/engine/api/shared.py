@@ -198,7 +198,7 @@ def get_broker() -> "BrokerProtocol":
 
     BROKER SWAP EFFECT:
         The returned broker changes based on METADRON_BROKER_TYPE:
-            "alpaca"  → AlpacaBroker (connects to IBKR brokerage API)
+            "ibkr"    → IBKRBroker (connects to IBKR brokerage API)
             "paper"   → PaperBroker  (fully simulated, no external calls)
             "tradier" → TradierBroker (not yet wired — falls back to paper)
             "ibkr"    → IBKRBroker  (future implementation)
@@ -231,7 +231,7 @@ def get_l7() -> Optional["_L7"]:
     L7 is the "fused continuous execution arm" that unifies:
         - WonderTrader (micro-price + CTA signals)
         - ExchangeCore (order matching ring buffer)
-        - AlpacaBroker / PaperBroker (bookkeeping)
+        - IBKRBroker / PaperBroker (bookkeeping)
         - OptionsEngine (Greeks and hedging)
         - QuantStrategyExecutor (12 technical strategies)
         - BetaCorridor (futures hedging)
@@ -383,7 +383,7 @@ def get_options() -> "_OptionsEngine":
     BROKER SWAP EFFECT:
         OptionsEngine is broker-agnostic at the read level (Greeks, vol
         surface, strategy matrix).  For order execution it relies on
-        L7's _execute_option() which calls AlpacaBroker.place_order()
+        L7's _execute_option() which calls IBKRBroker.place_order()
         with appropriate option contract params.  Swapping to IBKR would
         require updating L7._execute_option() to use the IBKR options API.
 

@@ -3483,7 +3483,7 @@
       },
       "id": 763,
       "panels": [],
-      "title": "Broker Reconciliation \u2014 Paper vs Alpaca",
+      "title": "Broker Reconciliation \u2014 Paper vs IBKR",
       "type": "row"
     },
     {
@@ -3817,7 +3817,7 @@
         "y": 140
       },
       "id": 769,
-      "title": "Recon: Alpaca NAV",
+      "title": "Recon: IBKR NAV",
       "type": "stat",
       "options": {
         "colorMode": "background",
@@ -3839,7 +3839,7 @@
             "type": "prometheus",
             "uid": "metadron-prometheus"
           },
-          "expr": "metadron_recon_alpaca_nav",
+          "expr": "metadron_recon_ibkr_nav",
           "refId": "A"
         }
       ]
@@ -3904,8 +3904,8 @@
             "type": "prometheus",
             "uid": "metadron-prometheus"
           },
-          "expr": "metadron_recon_alpaca_nav",
-          "legendFormat": "Alpaca NAV",
+          "expr": "metadron_recon_ibkr_nav",
+          "legendFormat": "IBKR NAV",
           "refId": "B"
         }
       ]

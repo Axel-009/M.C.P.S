@@ -139,7 +139,7 @@ function FilterBar({
 // ═══════════ MAIN COMPONENT ═══════════
 
 export default function TransactionLog() {
-  // ─── Engine API: primary = /portfolio/orders (Alpaca), secondary = /execution/l7/blotter ───
+  // ─── Engine API: primary = /portfolio/orders (IBKR), secondary = /execution/l7/blotter ───
   const { data: ordersData } = useEngineQuery<{ orders: OrderRecord[]; source: string }>(
     "/portfolio/orders?limit=500",
     { refetchInterval: 5000 },
@@ -184,7 +184,7 @@ export default function TransactionLog() {
       }
     }
 
-    // Secondary: Alpaca orders (enriches with order status, type)
+    // Secondary: IBKR orders (enriches with order status, type)
     if (ordersData?.orders?.length) {
       for (const o of ordersData.orders) {
         // Skip if already in blotter by ticker+time match
@@ -203,7 +203,7 @@ export default function TransactionLog() {
           price: o.price || 0,
           notional: o.notional || 0,
           fillType: o.fill_type || "FULL",
-          venue: "ALPACA",
+          venue: "IBKR",
           signalType: o.signal_type || "BROKER",
           latencyMs: 0,
           slippageBps: 0,

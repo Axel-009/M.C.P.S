@@ -42,11 +42,11 @@ MARKET_CLOSE = "16:00"
 AFTER_HOURS_END = "20:00"
 
 # Universe scan strategy
-# Alpaca batch API: 1,000 symbols per call, ~2-5s response
+# IBKR batch API: 1,000 symbols per call, ~2-5s response
 # Strategy: scan ALL tickers every heartbeat, not staggered
 # Rationale: stale signals = missed opportunities
 SCAN_ALL_TICKERS = True            # Scan full universe every heartbeat
-BATCH_SIZE = 1000                  # Alpaca API batch limit
+BATCH_SIZE = 1000                  # IBKR API batch limit
 QUOTE_CACHE_TTL = 5                # Seconds before re-fetching quotes
 
 # Best execution considerations

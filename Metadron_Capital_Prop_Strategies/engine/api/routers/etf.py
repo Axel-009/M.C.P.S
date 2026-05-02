@@ -20,8 +20,8 @@ def _get_broker():
     global _broker
     if _broker is None:
         try:
-            from engine.execution.alpaca_broker import AlpacaBroker
-            _broker = AlpacaBroker()
+            from engine.execution.ibkr_broker import IBKRBroker
+            _broker = IBKRBroker()
         except Exception:
             from engine.execution.paper_broker import PaperBroker
             _broker = PaperBroker()

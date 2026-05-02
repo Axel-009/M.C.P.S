@@ -22,7 +22,7 @@
 | # | API | Purpose | Env Var(s) | Vault Location | Status |
 |---|-----|---------|-----------|---------------|--------|
 | 1 | **OpenBB / FMP** | All market data (equities, macro, fixed income, news, filings) | `FMP_API_KEY` | `engine/api/vault.py` | Configured |
-| 2 | **Alpaca** | Trade execution only (orders, positions, account) | `ALPACA_API_KEY`, `ALPACA_SECRET_KEY` | `engine/api/vault.py` | Configured |
+| 2 | **IBKR** | Trade execution only (orders, positions, account) | `IBKR_HOST`, `IBKR_PORT` | `engine/api/vault.py` | Configured |
 | 3 | **Xiaomi Mimo V2 Pro** | Brain Power — LLM inference, NanoClaw intelligence, engine actions | `XIAOMI_MIMO_API_KEY` | `engine/api/vault.py` | STUB (awaiting key) |
 
 **No other external APIs are used anywhere in the platform.**  
@@ -39,7 +39,7 @@ Removed/replaced: Anthropic, Yahoo Finance, Tradier, ZEP.
 | 3 | macro | `/api/engine/macro` | Macro data (FRED, CPI, GDP) |
 | 4 | signals | `/api/engine/signals` | Signal generation and management |
 | 5 | risk | `/api/engine/risk` | Risk metrics, VaR, correlation |
-| 6 | execution | `/api/engine/execution` | Trade execution via Alpaca |
+| 6 | execution | `/api/engine/execution` | Trade execution via IBKR |
 | 7 | agents | `/api/engine/agents` | NanoClaw, OpenClaw, Ruflo agents |
 | 8 | ml | `/api/engine/ml` | ML model serving and inference |
 | 9 | monitoring | `/api/engine/monitoring` | Engine health, VPS, logs, errors |
@@ -69,7 +69,7 @@ All routers mounted in `engine/api/server.py`.
 | NanoClaw | Operator chat agent | `/api/chat` → Brain Power (Xiaomi Mimo V2 Pro) |
 | Allocation | Engine status, beta corridor, kill switch | `/api/allocation/*` |
 | Universe | Scan status, stock universe | `/api/engine/universe/*` |
-| Execution | Live orders, positions, Alpaca status | `/api/engine/execution/*` |
+| Execution | Live orders, positions, IBKR status | `/api/engine/execution/*` |
 | Risk | VaR, correlations, risk metrics | `/api/engine/risk/*` |
 | Signals | Signal library, regime classification | `/api/engine/signals/*` |
 | Backtest | Backtester UI, Monte Carlo | `/api/engine/backtest/*` |
@@ -77,7 +77,7 @@ All routers mounted in `engine/api/server.py`.
 
 ### TECH Tab — API Endpoints Sub-Tab (NEW)
 Displays all 3 authorized APIs with:
-- Endpoint call points from `openbb_data.py`, `alpaca_broker.py`, `brain_power.py`
+- Endpoint call points from `openbb_data.py`, `ibkr_broker.py`, `brain_power.py`
 - Status badges: GREEN (configured) / YELLOW (stub)
 - Auth method per API
 - Error display with file/line info from `/monitoring/errors`
@@ -88,7 +88,7 @@ Displays all 3 authorized APIs with:
 
 ```
 Market Data:    OpenBB/FMP → engine/data/openbb_data.py → allocation engine → signals
-Execution:      Allocation decisions → engine/execution/alpaca_broker.py → Alpaca API
+Execution:      Allocation decisions → engine/execution/ibkr_broker.py → IBKR API
 Intelligence:   NanoClaw → engine/bridges/brain_power.py → Xiaomi Mimo V2 Pro
 LLM Bridge:     All LLM calls → engine/bridges/llm_inference_bridge.py → BrainPowerClient
 ```
@@ -133,7 +133,7 @@ LLM Bridge:     All LLM calls → engine/bridges/llm_inference_bridge.py → Bra
 
 - [ ] Provide `XIAOMI_MIMO_API_KEY` (Brain Power)
 - [x] `FMP_API_KEY` — configured
-- [x] `ALPACA_API_KEY` + `ALPACA_SECRET_KEY` — configured
+- [x] `IBKR_HOST` + `IBKR_PORT` — configured
 - [x] All 21 routers mounted on port 8001
 - [x] Frontend proxied through port 5000
 - [x] PM2 ecosystem configured

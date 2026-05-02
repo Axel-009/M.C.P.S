@@ -74,7 +74,7 @@ for slot,info in data.get('slots',{}).items():
     print(f'  {slot:30s} {status:8s} ({req})')
 print(f\"\\n  Configured: {data.get('configured',0)}/{data.get('total_slots',0)}\")
 "
-# ALPACA_API_KEY, ALPACA_SECRET_KEY, FMP_API_KEY must show SET
+# IBKR_HOST, IBKR_PORT, IBKR_CLIENT_ID, FMP_API_KEY must show SET
 ```
 
 ### Security System
@@ -168,7 +168,7 @@ If all 13 checks pass, your platform is live:
 - Trading engine running 24/7
 - AI models serving inference
 - Market data flowing from FMP
-- Trades executing via Alpaca (paper or live)
+- Trades executing via IBKR (paper or live)
 - Monitoring dashboards on Grafana
 - Alerts configured for Slack/Email
 - Security module protecting all endpoints

@@ -76,7 +76,7 @@ This creates `dist/index.cjs` (the production Express server that serves the Rea
 ```bash
 mkdir -p /opt/metadron/logs/pm2
 mkdir -p /opt/metadron/data/{vault,security/ledger,archive/token_usage,learning/archive,paul_patterns,graphify,backtests,trades,regime,discoveries,universe_cache,agents}
-mkdir -p /opt/metadron/logs/{errors,returns,reports,paper_broker,alpaca_broker,research_bots,learning_loop,live_loop,l7_execution,l7_learning,conviction_overrides,enforcement,agent_factory,agent_scorecard,missed_opportunities}
+mkdir -p /opt/metadron/logs/{errors,returns,reports,paper_broker,ibkr_broker,research_bots,learning_loop,live_loop,l7_execution,l7_learning,conviction_overrides,enforcement,agent_factory,agent_scorecard,missed_opportunities}
 ```
 
 ## 2.5 Environment Configuration
@@ -95,9 +95,10 @@ nano .env.production
 
 ```bash
 # REQUIRED — Trading
-ALPACA_API_KEY=your_actual_alpaca_key
-ALPACA_SECRET_KEY=your_actual_alpaca_secret
-ALPACA_PAPER_TRADE=True    # Set to False for live trading (be sure!)
+IBKR_HOST=127.0.0.1
+IBKR_PORT=7497
+IBKR_CLIENT_ID=1
+IBKR_PAPER=True
 
 # REQUIRED — Market Data
 FMP_API_KEY=your_actual_fmp_key
@@ -146,7 +147,7 @@ source venv/bin/activate
 python3 -m pytest tests/ -v
 ```
 
-Expected: 164+ passed. The 1 Alpaca test failure and ~20 router test errors
+Expected: 164+ passed. The 1 IBKR test failure and ~20 router test errors
 are normal if you haven't started the API server yet.
 
 ## 2.8 Start PM2 Ecosystem

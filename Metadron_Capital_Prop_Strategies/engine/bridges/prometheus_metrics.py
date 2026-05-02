@@ -1152,10 +1152,10 @@ def _collect_live_metrics(metrics: dict):
         ibkr_nav = 0
         broker_pos = {}
         try:
-            from engine.execution.alpaca_broker import AlpacaBroker
-            ab = AlpacaBroker(initial_cash=0, paper=True)
-            broker_pos = ab.get_positions()
-            ibkr_nav = ab.compute_nav()
+            from engine.execution.ibkr_broker import IBKRBroker
+            ib = IBKRBroker(initial_cash=0, paper=True)
+            broker_pos = ib.get_positions()
+            ibkr_nav = ib.compute_nav()
         except Exception:
             pass
         metrics["recon_ibkr_nav"].set(ibkr_nav)

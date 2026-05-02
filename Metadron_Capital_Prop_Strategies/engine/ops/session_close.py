@@ -80,7 +80,7 @@ def generate_recon_log() -> Path:
     The only expected difference should be futures positions (no futures broker
     on IBKR). All equity/ETF/options positions should match.
 
-    Source: AlpacaBroker.get_positions() vs PaperBroker.get_positions()
+    Source: IBKRBroker.get_positions() vs PaperBroker.get_positions()
     Output: logs/reconciliation/RECON_{YYYYMMDD}.json
     """
     _ensure_dirs()
@@ -96,8 +96,8 @@ def generate_recon_log() -> Path:
         # Get IBKRBroker positions
         broker_positions = {}
         try:
-            from engine.execution.alpaca_broker import AlpacaBroker
-            alpaca = AlpacaBroker(initial_cash=0, paper=True)
+            from engine.execution.ibkr_broker import IBKRBroker
+            ibkr = IBKRBroker(initial_cash=0, paper=True)
             broker_positions = ibkr.get_positions()
         except Exception as e:
             logger.warning(f"IBKR broker unavailable for recon: {e}")

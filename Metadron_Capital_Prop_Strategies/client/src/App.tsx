@@ -114,7 +114,7 @@ function MetadronLogo() {
 }
 
 function LiveMetrics() {
-  // Real data: P&L from Alpaca broker, SPY from FMP/OpenBB, LAT from API round-trip
+  // Real data: P&L from IBKR broker, SPY from FMP/OpenBB, LAT from API round-trip
   const { data: portfolio } = useEngineQuery<{ nav: number; total_pnl: number }>("/portfolio/live", { refetchInterval: 15000 });
   const { data: macro } = useEngineQuery<{ spy_return_1d?: number; spy_price?: number }>("/macro/snapshot", { refetchInterval: 30000 });
   const [latency, setLatency] = useState(0);

@@ -321,7 +321,7 @@ function LiveTransactions({ onTickerSelect }: LiveTransactionsProps) {
       <div ref={scrollRef} className="flex-1 overflow-auto">
         {trades.length === 0 && (
           <div style={{color: "var(--muted)", fontSize: 11, padding: "28px 16px", textAlign: "center", lineHeight: 1.6, opacity: 0.7}}>
-            No executions yet — trades will appear here once the L7 engine fills an order through Alpaca or the paper broker.
+            No executions yet — trades will appear here once the L7 engine fills an order through IBKR or the paper broker.
           </div>
         )}
         {trades.map((tx, i) => {

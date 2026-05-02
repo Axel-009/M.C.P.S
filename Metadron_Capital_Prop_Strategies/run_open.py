@@ -30,7 +30,7 @@ def main():
     print("=" * 70)
     print()
 
-    # Initialize engine (NAV resolved dynamically from Alpaca)
+    # Initialize engine (NAV resolved dynamically from IBKR)
     print("Initializing execution engine...")
     engine = ExecutionEngine()  # NAV auto-resolved from broker
 

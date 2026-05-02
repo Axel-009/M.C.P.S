@@ -26,7 +26,7 @@ def main():
     print()
 
     # Initialize engine (in production, load persisted state)
-    # Initialize engine (NAV resolved dynamically from Alpaca)
+    # Initialize engine (NAV resolved dynamically from IBKR)
     engine = ExecutionEngine()  # NAV auto-resolved from broker
 
     # Run signal refresh (lighter than full pipeline)

@@ -60,13 +60,6 @@ from .paper_broker import (
     PaperBroker, OrderSide, SignalType, Position,
 )
 
-# Legacy broker import (backward compat — IBKR is sole broker via L7)
-try:
-    from .alpaca_broker import AlpacaBroker
-except ImportError:
-    AlpacaBroker = None  # type: ignore[assignment,misc]
-
-
 # L7 HFT Technical Execution (quant-trading strategies)
 try:
     from .quant_strategy_executor import QuantStrategyExecutor
@@ -1137,19 +1130,6 @@ class ExecutionEngine:
                 logger.warning("IBKRBroker init failed: %s — falling back to trade log mode", e)
                 self.broker = PaperBroker(initial_cash=initial_nav or 100_000.0)
                 self._broker_alert = "NOTICE: IBKR unavailable — trade log mode (no live execution)"
-        elif broker_type == "ibkr":
-            if AlpacaBroker is not None:
-                try:
-                    self.broker = AlpacaBroker(initial_cash=initial_nav or 100_000.0)
-                    logger.info("ExecutionEngine using AlpacaBroker (legacy, paper=%s)",
-                                self.broker.paper)
-                except Exception as e:
-                    logger.error("AlpacaBroker failed: %s — falling back to trade log", e)
-                    self.broker = PaperBroker(initial_cash=initial_nav or 100_000.0)
-                    self._broker_alert = "NOTICE: AlpacaBroker failed — trade log mode"
-            else:
-                self.broker = PaperBroker(initial_cash=initial_nav or 100_000.0)
-                self._broker_alert = "NOTICE: AlpacaBroker unavailable — trade log mode"
         else:
             self.broker = PaperBroker(initial_cash=initial_nav or 100_000.0)
             logger.info("ExecutionEngine using trade log mode (broker_type=%s)", broker_type)
@@ -1304,14 +1284,14 @@ class ExecutionEngine:
     def get_broker_status(self) -> dict:
         """Get current broker status and any routing alerts."""
         broker_type = type(self.broker).__name__
-        is_live = broker_type in ("IBKRBroker", "AlpacaBroker")
+        is_live = broker_type in ("IBKRBroker",)
         return {
             "broker": broker_type,
             "is_live": is_live,
             "is_trade_log_only": broker_type == "PaperBroker",
             "alert": self._broker_alert,
             "trades_today": len(self._trade_log),
-            "trades_to_broker": sum(1 for t in self._trade_log if t.get("broker") in ("IBKRBroker", "AlpacaBroker")),
+            "trades_to_broker": sum(1 for t in self._trade_log if t.get("broker") in ("IBKRBroker",)),
             "trades_to_log": sum(1 for t in self._trade_log if t.get("broker") == "PaperBroker"),
         }
 
@@ -1844,86 +1824,11 @@ class ExecutionEngine:
         }
         self.tracker.record_stage("alpha", (datetime.now() - t0).total_seconds() * 1000, result["stages"]["alpha"])
 
-        # Stage 5.25: Options chain scanning (full universe momentum + volatility)
+        # Stage 5.25: Options chain scanning is performed by OptionsEngine via IBKR
+        # (BS + MC + Kelly with edge gate >=200bps). This stub keeps the stage timing
+        # accurate; the real scan is invoked by OptionsEngine.scan() upstream.
         t0 = datetime.now()
-        options_data = {"status": "not_scanned"}
-        try:
-            from .options_engine import BlackScholesModel
-            bs = BlackScholesModel()
-            from alpaca.trading.requests import GetOptionContractsRequest
-            from alpaca.trading.enums import AssetStatus, ContractType
-            
-            # Use top 10 alpha signals only (faster than 30)
-            options_candidates = []
-            for sig in alpha_out.signals[:10]:
-                ticker = sig.ticker
-                spot = 0.0
-                try:
-                    from ..data.openbb_data import get_adj_close
-                    p = get_adj_close([ticker], start=datetime.now().strftime("%Y-%m-%d"))
-                    if not p.empty:
-                        spot = float(p[ticker].iloc[-1])
-                except Exception as e:
-                    logger.warning("Options: spot price fetch failed for ticker=%s: %s", ticker, e)
-                    continue
-                if spot <= 0:
-                    continue
-                
-                # Get options chain from IBKRBroker
-                try:
-                    req = GetOptionContractsRequest(
-                        underlying_symbols=[ticker],
-                        status=AssetStatus.ACTIVE,
-                        expiration_date_gte=(datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d"),
-                        expiration_date_lte=(datetime.now() + timedelta(days=45)).strftime("%Y-%m-%d"),
-                        limit=20,
-                    )
-                    chain = self.broker.trading_client.get_option_contracts(req)
-                    contracts = chain.option_contracts if hasattr(chain, 'option_contracts') else []
-                    
-                    for c in contracts:
-                        if not getattr(c, 'tradable', False):
-                            continue
-                        strike = float(c.strike_price)
-                        opt_type = 'call' if c.type == ContractType.CALL else 'put'
-                        iv = float(c.implied_volatility) if hasattr(c, 'implied_volatility') and c.implied_volatility else 0.30
-                        T = max((datetime.strptime(c.expiration_date, "%Y-%m-%d") - datetime.now()).days / 365.0, 0.001)
-                        if opt_type == 'call':
-                            theo = bs.call_price(spot, strike, T, 0.05, iv)
-                        else:
-                            theo = bs.put_price(spot, strike, T, 0.05, iv)
-                        delta = bs.delta(spot, strike, T, 0.05, iv, opt_type == 'call')
-                        
-                        options_candidates.append({
-                            "ticker": ticker,
-                            "symbol": c.symbol,
-                            "type": opt_type,
-                            "strike": strike,
-                            "expiry": c.expiration_date,
-                            "theo_price": round(theo, 2),
-                            "delta": round(delta, 3),
-                            "iv": round(iv, 4),
-                            "alpha": sig.alpha_pred,
-                            "momentum": sig.momentum_1m,
-                        })
-                except Exception as e:
-                    logger.error("Options: chain processing failed for ticker=%s: %s", ticker, e, exc_info=True)
-
-            if options_candidates:
-                for o in options_candidates:
-                    o["score"] = abs(o["alpha"]) * abs(o["delta"]) * (1 + abs(o["momentum"]))
-                options_candidates.sort(key=lambda x: x["score"], reverse=True)
-                options_data = {
-                    "total_scanned": len(options_candidates),
-                    "top_10": options_candidates[:10],
-                    "regime": cube_out.regime.value,
-                }
-                logger.info(f"Options scan: {len(options_candidates)} opportunities")
-            else:
-                options_data = {"status": "no_contracts_available"}
-        except Exception as e:
-            options_data = {"error": str(e)}
-            logger.warning(f"Options scan failed: {e}")
+        options_data = {"status": "delegated_to_options_engine"}
         result["stages"]["options"] = options_data
         self.tracker.record_stage("options", (datetime.now() - t0).total_seconds() * 1000, options_data)
 

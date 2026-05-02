@@ -30,10 +30,10 @@ def main():
     print("=" * 70)
     print()
 
-    # Pull portfolio state from Alpaca (dynamic NAV)
+    # Pull portfolio state from IBKR (dynamic NAV)
     try:
-        from engine.execution.alpaca_broker import AlpacaBroker
-        broker = AlpacaBroker(initial_cash=0, paper=True)
+        from engine.execution.ibkr_broker import IBKRBroker
+        broker = IBKRBroker(initial_cash=0, paper=True)
         portfolio_summary = broker.get_portfolio_summary()
         print(f"Portfolio: NAV=${portfolio_summary.get('nav', 0):,.2f}, "
               f"Positions={portfolio_summary.get('positions', 0)}")
@@ -48,7 +48,7 @@ def main():
                 portfolio_summary = {"nav": 0, "cash": 0, "total_pnl": 0, "positions": 0}
         else:
             portfolio_summary = {"nav": 0, "cash": 0, "total_pnl": 0, "positions": 0}
-        print(f"Warning: Alpaca unavailable ({e}), using fallback state")
+        print(f"Warning: IBKR unavailable ({e}), using fallback state")
 
     # Heatmap
     print(generate_sector_heatmap())

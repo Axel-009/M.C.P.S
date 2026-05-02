@@ -7,7 +7,7 @@
 ## SESSION SUMMARY
 
 20 commits, 4,957 lines added, 153/153 tests green, 50/55 modules import clean.
-Bobby wired Alpaca broker, MC risk engine, agent sim, model persistence, Black-Scholes dedup, full orchestrator pipeline. Strong B+ work.
+Bobby wired IBKR broker, MC risk engine, agent sim, model persistence, Black-Scholes dedup, full orchestrator pipeline. Strong B+ work.
 
 ---
 
@@ -19,12 +19,12 @@ Bobby wired Alpaca broker, MC risk engine, agent sim, model persistence, Black-S
 - **Fix:** Add HMAC-SHA256 signing on save, verify before every load
 - **Fix:** Validate `name` param — reject if contains `..` or `/`
 
-### 1.2 Alpaca Credential Silent Failure (20 min)
-**File:** `engine/execution/alpaca_broker.py:161-162`
+### 1.2 IBKR Credential Silent Failure (20 min)
+**File:** `engine/execution/ibkr_broker.py:161-162`
 - Empty API keys default to `""` — broker inits but all trades fail silently
 - Falls back to PaperBroker without telling you → you think you're live but you're paper
 - **Fix:** Raise `ValueError` if keys empty. Validate with `get_account()` call on init
-- **Fix:** Remove silent PaperBroker fallback in execution_engine.py when broker_type="alpaca"
+- **Fix:** Remove silent PaperBroker fallback in execution_engine.py when broker_type="ibkr"
 
 ### 1.3 Paper Broker State Corruption (40 min)
 **File:** `engine/execution/paper_broker.py:902-926`
@@ -34,8 +34,8 @@ Bobby wired Alpaca broker, MC risk engine, agent sim, model persistence, Black-S
 - **Fix:** Validate cash >= 0, nav > 0, quantity > 0, price > 0 on load
 
 ### 1.4 Log Credential Leakage (15 min)
-**File:** `engine/execution/alpaca_broker.py:265-270`
-- Alpaca API errors may include auth headers in exception objects
+**File:** `engine/execution/ibkr_broker.py:265-270`
+- IBKR API errors may include auth headers in exception objects
 - **Fix:** Log only `status_code` and `code`, never full exception
 
 ### 1.5 Orchestrator None Guards (30 min)
@@ -115,12 +115,12 @@ Generate a single JSON log file per day at `logs/daily/YYYY-MM-DD.json` containi
 ## PHASE 5: PRODUCTION HARDENING (2 hrs)
 
 ### 5.1 Circuit Breaker (45 min)
-- Add to `alpaca_broker.py`: trip after 5 consecutive failures, auto-reset after 60s cooldown
+- Add to `ibkr_broker.py`: trip after 5 consecutive failures, auto-reset after 60s cooldown
 - States: CLOSED → OPEN → HALF_OPEN
 
 ### 5.2 Idempotent Orders (30 min)
 - Generate deterministic order ID: `hash(ticker + signal + timestamp_minute)`
-- Pass as `client_order_id` to Alpaca API — prevents duplicate fills on heartbeat race
+- Pass as `client_order_id` to IBKR API — prevents duplicate fills on heartbeat race
 
 ### 5.3 Signal Validation Layer (30 min)
 - Before DecisionMatrix: reject any signal with NaN score, stale timestamp (>5 min), or score outside [-1, 1]
@@ -166,7 +166,7 @@ L1 Data         PASS      5/5      A      1,044 securities loaded
 L2 Signals      PASS      11/11    A-     All engines instantiate
 L3 ML           PASS      7/8      B+     model_store on bobby branch only
 L4 Portfolio    PASS      1/1      A-     Beta corridor functional
-L5 Execution    PASS      6/7      B+     Alpaca on bobby branch only
+L5 Execution    PASS      6/7      B+     IBKR on bobby branch only
 L6 Agents       PASS      6/6      B      11 sector bots + 12 personas
 L7 HFT          PASS      1/1      A-     Unified surface working
 Risk            PARTIAL   0/1      —      MC risk on bobby branch only

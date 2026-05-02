@@ -4,7 +4,7 @@
 
 A quantitative investment platform that runs 24/7 on a Hetzner GEX44 GPU server.
 It ingests market data, runs AI models, generates trading signals, and executes
-trades via Alpaca. A separate Contabo VPS monitors everything via Grafana.
+trades via IBKR. A separate Contabo VPS monitors everything via Grafana.
 
 ## Two Servers
 
@@ -64,5 +64,5 @@ REPORTING:    TXLOG, TCA, REPORTS, ARCHIVE
 2. `02_APPLICATION.md` — Deploy the code (clone, install, configure, PM2)
 3. `03_NGINX_SSL.md` — Set up web access (reverse proxy, SSL, landing page)
 4. `04_MONITORING.md` — Set up monitoring (Contabo, Docker, Grafana, WireGuard)
-5. `05_API_KEYS.md` — Configure API keys (Alpaca, FMP, Xiaomi, Jarvis)
+5. `05_API_KEYS.md` — Configure API keys (IBKR, FMP, OpenRouter, Jarvis)
 6. `06_LAUNCH_CHECKLIST.md` — Final checks and first boot

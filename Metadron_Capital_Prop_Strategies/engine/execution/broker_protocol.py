@@ -200,7 +200,7 @@ class BrokerProtocol(Protocol):
 
     paper: bool
     """True when the broker is running in simulation mode (no real
-    orders sent to an exchange).  AlpacaBroker exposes this as
+    orders sent to an exchange).  IBKRBroker exposes this as
     ``self.paper = os.getenv("IBKR_PAPER_TRADE", "True") == "true"``.
     Used by get_broker_status() and the shared API singleton to label
     the active environment in dashboard headers."""
@@ -225,7 +225,7 @@ class BrokerProtocol(Protocol):
 
         AI NOTE:
             In PaperBroker this fills synchronously via MicroPriceModel.
-            In AlpacaBroker this submits to the Alpaca SDK, polls for fill
+            In IBKRBroker this submits via ib_insync, polls for fill
             status (_poll_order_fill), then calls _sync_after_fill.
             A new broker must return an Order dataclass (from paper_broker.py)
             so that the ExecutionEngine pipeline logging stays consistent.
@@ -262,7 +262,7 @@ class BrokerProtocol(Protocol):
             realized_pnl, sector.
 
         AI NOTE:
-            AlpacaBroker syncs positions from the Alpaca SDK on every call.
+            IBKRBroker syncs positions from IBKR on every call.
             A new live broker should do the same — query the exchange and
             update self.state.positions before returning.
         """
@@ -276,7 +276,7 @@ class BrokerProtocol(Protocol):
         """Recompute and return current Net Asset Value.
 
         cash + sum(position.quantity * current_price for each position).
-        AlpacaBroker prefers the account equity from the Alpaca SDK and
+        IBKRBroker prefers the account equity from IBKR and
         falls back to the local state calculation.
         """
         ...
@@ -372,7 +372,7 @@ class BrokerProtocol(Protocol):
         """Re-fetch current prices for all held positions and update state.
 
         PaperBroker uses OpenBB get_adj_close().
-        AlpacaBroker uses the Alpaca market data SDK (StockLatestBarRequest).
+        IBKRBroker uses ib_insync market data (reqMktData / reqHistoricalData).
         A new broker should use whatever market data feed is cheapest/fastest
         for the target exchange.
         """
@@ -386,7 +386,7 @@ class BrokerProtocol(Protocol):
         """Reconcile local portfolio state against the exchange.
 
         PaperBroker does an internal position consistency check.
-        AlpacaBroker compares local state against live IBKR account data.
+        IBKRBroker compares local state against live IBKR account data.
         Returns a dict with keys: status, discrepancies, resolved_at.
 
         AI NOTE:

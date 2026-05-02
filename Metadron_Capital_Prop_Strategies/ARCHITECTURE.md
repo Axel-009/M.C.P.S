@@ -81,8 +81,8 @@ PHASE 2: SIGNALS (1-min cadence)
   │   │                       │                   ▼
   │   │                       │   PHASE 5: EXECUTION
   │   │                       │   ├── Standard: approved → L7 Execution Surface
-  │   │                       │   │   ├── EQUITY → WonderTrader → Alpaca
-  │   │                       │   │   ├── OPTION → OptionsEngine → Alpaca
+  │   │                       │   │   ├── EQUITY → WonderTrader → IBKR
+  │   │                       │   │   ├── OPTION → OptionsEngine → IBKR
   │   │                       │   │   └── FUTURE → BetaCorridor → Paper (Rithmic later)
   │   │                       │   └── Direct (high-conviction):
   │   │                       │       ├── News+Miro (≥0.3) → L7 [NEWS_MIRO_DIRECT]
@@ -122,11 +122,11 @@ PHASE 2: SIGNALS (1-min cadence)
    │  PHASE 7: MONITORING           │
    │  ├── Portfolio P&L tracking    │
    │  │   ├── Total NAV P&L         │
-   │  │   ├── Equities P&L (Alpaca) │
-   │  │   ├── Options P&L (Alpaca)  │
+   │  │   ├── Equities P&L (IBKR) │
+   │  │   ├── Options P&L (IBKR)  │
    │  │   └── Futures P&L (Paper)   │
    │  ├── 3-Layer Profit-Take (20%) │
-   │  │   ├── Alpaca >20% → sell options, re-run
+   │  │   ├── IBKR >20% → sell options, re-run
    │  │   ├── Futures >20% → sell futures, re-run
    │  │   └── Aggregate >20% → sell all overlays, re-run
    │  ├── Position 20% drawdown     │
@@ -134,7 +134,7 @@ PHASE 2: SIGNALS (1-min cadence)
    │  ├── Portfolio 20% drawdown    │
    │  │   → kill switch, liquidate all, operator reset
    │  ├── Broker integrity recon    │
-   │  │   (paper vs Alpaca, $0.01 / 1 share tolerance)
+   │  │   (paper vs IBKR, $0.01 / 1 share tolerance)
    │  ├── Circuit breaker eval      │
    │  ├── AnomalyDetector.scan()    │
    │  └── PortfolioAnalytics        │
@@ -184,7 +184,7 @@ PHASE 2: SIGNALS (1-min cadence)
 ═══════════════════════════════════════════════════════════════════════════════
 
   1. PhaseChain         — HMAC-signed output between phases (break = halt new trades)
-  2. BrokerIntegrityLock — Paper vs Alpaca reconciliation (> $0.01 = freeze entries)
+  2. BrokerIntegrityLock — Paper vs IBKR reconciliation (> $0.01 = freeze entries)
   3. TransactionLedger  — Append-only HMAC-chained trade log (tamper-evident)
   4. CircuitBreaker     — Perimeter lockdown (200 req/10s → API 503, engine running)
   5. HeartbeatIntegrity — Signed PM2 heartbeats (missing > 5min = warn)

@@ -8,19 +8,19 @@ import {
 
 // ═══════════ TYPES ═══════════
 
-type ReconStatus = "MATCHED" | "MISMATCH" | "PAPER_ONLY" | "ALPACA_ONLY" | "EXPECTED_DIFF";
+type ReconStatus = "MATCHED" | "MISMATCH" | "PAPER_ONLY" | "IBKR_ONLY" | "EXPECTED_DIFF";
 
 interface ReconPosition {
   ticker: string;
   sector: string;
   paperQty: number | null;
-  alpacaQty: number | null;
+  ibkrQty: number | null;
   qtyMatch: boolean | null;
   paperAvgPrice: number | null;
-  alpacaAvgPrice: number | null;
+  ibkrAvgPrice: number | null;
   priceDiff: number | null;
   paperPnl: number | null;
-  alpacaPnl: number | null;
+  ibkrPnl: number | null;
   pnlDiff: number | null;
   delta: number;
   isFutures: boolean;
@@ -32,7 +32,7 @@ interface ReconSummary {
   matched: number;
   mismatched: number;
   paperNav: number;
-  alpacaNav: number;
+  ibkrNav: number;
   navDelta: number;
 }
 
@@ -46,7 +46,7 @@ interface ReconResponse {
 interface NavHistoryEntry {
   date: string;
   paper: number;
-  alpaca: number;
+  ibkr: number;
 }
 
 // ═══════════ STATUS HELPERS ═══════════
@@ -55,7 +55,7 @@ const STATUS_STYLES: Record<ReconStatus, { color: string; bg: string; border: st
   MATCHED: { color: "#3fb950", bg: "#3fb95018", border: "#3fb95040" },
   MISMATCH: { color: "#f85149", bg: "#f8514918", border: "#f8514940" },
   PAPER_ONLY: { color: "#d29922", bg: "#d2992218", border: "#d2992240" },
-  ALPACA_ONLY: { color: "#58a6ff", bg: "#58a6ff18", border: "#58a6ff40" },
+  IBKR_ONLY: { color: "#58a6ff", bg: "#58a6ff18", border: "#58a6ff40" },
   EXPECTED_DIFF: { color: "#8b949e", bg: "#8b949e18", border: "#8b949e40" },
 };
 
@@ -75,13 +75,13 @@ function StatusBadge({ status }: { status: ReconStatus }) {
 
 function SummaryCards({ positions, summary }: { positions: ReconPosition[]; summary: ReconSummary | null }) {
   const paperPositions = positions.filter(p => p.paperQty !== null);
-  const alpacaPositions = positions.filter(p => p.alpacaQty !== null);
+  const ibkrPositions = positions.filter(p => p.ibkrQty !== null);
   const matched = summary?.matched ?? positions.filter(p => p.status === "MATCHED").length;
   const mismatched = summary?.mismatched ?? positions.filter(p => p.status !== "MATCHED" && p.status !== "EXPECTED_DIFF").length;
 
   const paperNAV = summary?.paperNav ?? 0;
-  const alpacaNAV = summary?.alpacaNav ?? 0;
-  const navDiff = summary?.navDelta ?? (alpacaNAV - paperNAV);
+  const ibkrNAV = summary?.ibkrNav ?? 0;
+  const navDiff = summary?.navDelta ?? (ibkrNAV - paperNAV);
 
   const lastRecon = new Date().toLocaleString("en-US", {
     month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
@@ -89,11 +89,11 @@ function SummaryCards({ positions, summary }: { positions: ReconPosition[]; summ
 
   const cards = [
     { label: "PAPER POSITIONS", value: `${paperPositions.length}`, color: "text-terminal-text-primary" },
-    { label: "ALPACA POSITIONS", value: `${alpacaPositions.length}`, color: "text-[#58a6ff]" },
+    { label: "IBKR POSITIONS", value: `${ibkrPositions.length}`, color: "text-[#58a6ff]" },
     { label: "MATCHED", value: `${matched}`, color: "text-terminal-positive" },
     { label: "MISMATCHED", value: `${mismatched}`, color: mismatched > 0 ? "text-terminal-negative" : "text-terminal-positive" },
     { label: "PAPER NAV", value: paperNAV > 0 ? `$${(paperNAV / 1e6).toFixed(2)}M` : "$0", color: "text-terminal-accent" },
-    { label: "ALPACA NAV", value: alpacaNAV > 0 ? `$${(alpacaNAV / 1e6).toFixed(2)}M` : "$0", color: "text-[#58a6ff]" },
+    { label: "IBKR NAV", value: ibkrNAV > 0 ? `$${(ibkrNAV / 1e6).toFixed(2)}M` : "$0", color: "text-[#58a6ff]" },
     { label: "NAV DIFF", value: `${navDiff >= 0 ? "+" : ""}$${Math.abs(navDiff).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, color: Math.abs(navDiff) < 10000 ? "text-terminal-positive" : "text-terminal-negative" },
     { label: "LAST RECON", value: lastRecon, color: "text-terminal-text-muted" },
   ];
@@ -125,7 +125,7 @@ function ReconciliationTable({ positions }: { positions: ReconPosition[] }) {
     MATCHED: positions.filter(p => p.status === "MATCHED").length,
     MISMATCH: positions.filter(p => p.status === "MISMATCH").length,
     PAPER_ONLY: positions.filter(p => p.status === "PAPER_ONLY").length,
-    ALPACA_ONLY: positions.filter(p => p.status === "ALPACA_ONLY").length,
+    IBKR_ONLY: positions.filter(p => p.status === "IBKR_ONLY").length,
     EXPECTED_DIFF: positions.filter(p => p.status === "EXPECTED_DIFF").length,
   }), [positions]);
 
@@ -133,7 +133,7 @@ function ReconciliationTable({ positions }: { positions: ReconPosition[] }) {
     <div className="text-[10px] h-full flex flex-col">
       {/* Filter tabs */}
       <div className="flex items-center gap-1 mb-1.5 flex-shrink-0">
-        {(["all", "MATCHED", "MISMATCH", "PAPER_ONLY", "ALPACA_ONLY", "EXPECTED_DIFF"] as const).map(f => {
+        {(["all", "MATCHED", "MISMATCH", "PAPER_ONLY", "IBKR_ONLY", "EXPECTED_DIFF"] as const).map(f => {
           const count = statusCounts[f];
           if (f !== "all" && count === 0) return null;
           const s = f !== "all" ? STATUS_STYLES[f] : null;
@@ -160,7 +160,7 @@ function ReconciliationTable({ positions }: { positions: ReconPosition[] }) {
           <table className="w-full">
             <thead className="sticky top-0 bg-terminal-surface z-10">
               <tr className="border-b border-terminal-border">
-                {["TICKER", "SECTOR", "PAPER QTY", "ALPACA QTY", "QTY ✓", "PAPER AVG", "ALPACA AVG", "PRICE DIFF", "PAPER P&L", "ALPACA P&L", "P&L DIFF", "STATUS"].map(h => (
+                {["TICKER", "SECTOR", "PAPER QTY", "IBKR QTY", "QTY ✓", "PAPER AVG", "IBKR AVG", "PRICE DIFF", "PAPER P&L", "IBKR P&L", "P&L DIFF", "STATUS"].map(h => (
                   <th key={h} className="py-1 px-1.5 text-left font-medium text-terminal-text-faint whitespace-nowrap">{h}</th>
                 ))}
               </tr>
@@ -169,14 +169,14 @@ function ReconciliationTable({ positions }: { positions: ReconPosition[] }) {
               {filtered.map(pos => {
                 const rowBg = pos.status === "MISMATCH"
                   ? "hover:bg-red-950/20"
-                  : pos.status === "PAPER_ONLY" || pos.status === "ALPACA_ONLY"
+                  : pos.status === "PAPER_ONLY" || pos.status === "IBKR_ONLY"
                   ? "hover:bg-yellow-950/20"
                   : "hover:bg-white/[0.02]";
                 const leftBorder = pos.status === "MISMATCH"
                   ? "border-l-2 border-l-red-500/50"
                   : pos.status === "PAPER_ONLY"
                   ? "border-l-2 border-l-yellow-500/50"
-                  : pos.status === "ALPACA_ONLY"
+                  : pos.status === "IBKR_ONLY"
                   ? "border-l-2 border-l-blue-500/50"
                   : pos.status === "EXPECTED_DIFF"
                   ? "border-l-2 border-l-gray-500/50"
@@ -186,7 +186,7 @@ function ReconciliationTable({ positions }: { positions: ReconPosition[] }) {
                     <td className="py-1.5 px-1.5 font-mono font-bold text-terminal-text-primary">{pos.ticker}</td>
                     <td className="py-1.5 px-1.5 text-terminal-text-faint text-[9px]">{pos.sector}</td>
                     <td className="py-1.5 px-1.5 font-mono">{pos.paperQty !== null ? pos.paperQty.toLocaleString() : <span className="text-terminal-text-faint">—</span>}</td>
-                    <td className="py-1.5 px-1.5 font-mono">{pos.alpacaQty !== null ? pos.alpacaQty.toLocaleString() : <span className="text-terminal-text-faint">—</span>}</td>
+                    <td className="py-1.5 px-1.5 font-mono">{pos.ibkrQty !== null ? pos.ibkrQty.toLocaleString() : <span className="text-terminal-text-faint">—</span>}</td>
                     <td className="py-1.5 px-1.5 font-mono text-center">
                       {pos.qtyMatch === null ? (
                         <span className="text-terminal-text-faint">—</span>
@@ -197,15 +197,15 @@ function ReconciliationTable({ positions }: { positions: ReconPosition[] }) {
                       )}
                     </td>
                     <td className="py-1.5 px-1.5 font-mono">{pos.paperAvgPrice !== null ? `$${pos.paperAvgPrice.toFixed(2)}` : <span className="text-terminal-text-faint">—</span>}</td>
-                    <td className="py-1.5 px-1.5 font-mono">{pos.alpacaAvgPrice !== null ? `$${pos.alpacaAvgPrice.toFixed(2)}` : <span className="text-terminal-text-faint">—</span>}</td>
+                    <td className="py-1.5 px-1.5 font-mono">{pos.ibkrAvgPrice !== null ? `$${pos.ibkrAvgPrice.toFixed(2)}` : <span className="text-terminal-text-faint">—</span>}</td>
                     <td className={`py-1.5 px-1.5 font-mono ${pos.priceDiff !== null ? (Math.abs(pos.priceDiff) > 0.5 ? "text-terminal-negative" : "text-terminal-text-muted") : ""}`}>
                       {pos.priceDiff !== null ? `${pos.priceDiff >= 0 ? "+" : ""}$${pos.priceDiff.toFixed(2)}` : <span className="text-terminal-text-faint">—</span>}
                     </td>
                     <td className={`py-1.5 px-1.5 font-mono ${pos.paperPnl !== null ? (pos.paperPnl >= 0 ? "text-terminal-positive" : "text-terminal-negative") : ""}`}>
                       {pos.paperPnl !== null ? `${pos.paperPnl >= 0 ? "+" : ""}$${Math.abs(pos.paperPnl).toLocaleString()}` : <span className="text-terminal-text-faint">—</span>}
                     </td>
-                    <td className={`py-1.5 px-1.5 font-mono ${pos.alpacaPnl !== null ? (pos.alpacaPnl >= 0 ? "text-terminal-positive" : "text-terminal-negative") : ""}`}>
-                      {pos.alpacaPnl !== null ? `${pos.alpacaPnl >= 0 ? "+" : ""}$${Math.abs(pos.alpacaPnl).toLocaleString()}` : <span className="text-terminal-text-faint">—</span>}
+                    <td className={`py-1.5 px-1.5 font-mono ${pos.ibkrPnl !== null ? (pos.ibkrPnl >= 0 ? "text-terminal-positive" : "text-terminal-negative") : ""}`}>
+                      {pos.ibkrPnl !== null ? `${pos.ibkrPnl >= 0 ? "+" : ""}$${Math.abs(pos.ibkrPnl).toLocaleString()}` : <span className="text-terminal-text-faint">—</span>}
                     </td>
                     <td className={`py-1.5 px-1.5 font-mono ${pos.pnlDiff !== null ? (Math.abs(pos.pnlDiff ?? 0) > 500 ? "text-terminal-negative" : "text-terminal-text-muted") : ""}`}>
                       {pos.pnlDiff !== null ? `${pos.pnlDiff >= 0 ? "+" : ""}$${Math.abs(pos.pnlDiff).toLocaleString()}` : <span className="text-terminal-text-faint">—</span>}
@@ -256,13 +256,13 @@ function DiscrepancyDetail({ positions }: { positions: ReconPosition[] }) {
                     <span className="font-mono">{pos.paperQty?.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-terminal-text-faint">Alpaca Qty</span>
-                    <span className="font-mono text-terminal-negative">{pos.alpacaQty?.toLocaleString()}</span>
+                    <span className="text-terminal-text-faint">IBKR Qty</span>
+                    <span className="font-mono text-terminal-negative">{pos.ibkrQty?.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-terminal-text-faint">Qty Δ</span>
                     <span className="font-mono text-terminal-negative">
-                      {((pos.alpacaQty ?? 0) - (pos.paperQty ?? 0) >= 0 ? "+" : "")}{(pos.alpacaQty ?? 0) - (pos.paperQty ?? 0)}
+                      {((pos.ibkrQty ?? 0) - (pos.paperQty ?? 0) >= 0 ? "+" : "")}{(pos.ibkrQty ?? 0) - (pos.paperQty ?? 0)}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -282,22 +282,22 @@ function DiscrepancyDetail({ positions }: { positions: ReconPosition[] }) {
                     <span className="font-mono">${pos.paperAvgPrice?.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between col-span-2 text-terminal-warning">
-                    <span>⚠ Missing in Alpaca — confirm fill</span>
+                    <span>⚠ Missing in IBKR — confirm fill</span>
                   </div>
                 </>
               )}
-              {pos.status === "ALPACA_ONLY" && (
+              {pos.status === "IBKR_ONLY" && (
                 <>
                   <div className="flex justify-between col-span-2">
-                    <span className="text-terminal-text-faint">Alpaca Qty</span>
-                    <span className="font-mono text-[#58a6ff]">{pos.alpacaQty?.toLocaleString()}</span>
+                    <span className="text-terminal-text-faint">IBKR Qty</span>
+                    <span className="font-mono text-[#58a6ff]">{pos.ibkrQty?.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between col-span-2">
-                    <span className="text-terminal-text-faint">Alpaca Avg</span>
-                    <span className="font-mono">${pos.alpacaAvgPrice?.toFixed(2)}</span>
+                    <span className="text-terminal-text-faint">IBKR Avg</span>
+                    <span className="font-mono">${pos.ibkrAvgPrice?.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between col-span-2 text-[#58a6ff]">
-                    <span>ℹ Alpaca position not in Paper — check order sync</span>
+                    <span>ℹ IBKR position not in Paper — check order sync</span>
                   </div>
                 </>
               )}
@@ -313,8 +313,8 @@ function DiscrepancyDetail({ positions }: { positions: ReconPosition[] }) {
 
 function NAVComparisonChart({ data }: { data: NavHistoryEntry[] }) {
   const lastPaper = data[data.length - 1]?.paper ?? 0;
-  const lastAlpaca = data[data.length - 1]?.alpaca ?? 0;
-  const navDiff = lastAlpaca - lastPaper;
+  const lastIbkr = data[data.length - 1]?.ibkr ?? 0;
+  const navDiff = lastIbkr - lastPaper;
   const navDiffPct = lastPaper > 0 ? ((navDiff / lastPaper) * 100).toFixed(3) : "0.000";
 
   return (
@@ -327,8 +327,8 @@ function NAVComparisonChart({ data }: { data: NavHistoryEntry[] }) {
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-3 h-0.5 bg-[#58a6ff] inline-block" />
-          <span className="text-terminal-text-faint">Alpaca</span>
-          <span className="font-mono text-[#58a6ff]">${lastAlpaca > 0 ? (lastAlpaca / 1e6).toFixed(2) + "M" : "0"}</span>
+          <span className="text-terminal-text-faint">IBKR</span>
+          <span className="font-mono text-[#58a6ff]">${lastIbkr > 0 ? (lastIbkr / 1e6).toFixed(2) + "M" : "0"}</span>
         </div>
         {lastPaper > 0 && (
           <div className="ml-auto flex items-center gap-1.5">
@@ -357,7 +357,7 @@ function NAVComparisonChart({ data }: { data: NavHistoryEntry[] }) {
                 formatter={(v: number) => [`$${(v / 1e6).toFixed(3)}M`]}
               />
               <Line type="monotone" dataKey="paper" stroke="#00d4aa" strokeWidth={1.5} dot={false} name="Paper NAV" />
-              <Line type="monotone" dataKey="alpaca" stroke="#58a6ff" strokeWidth={1.5} dot={false} name="Alpaca NAV" strokeDasharray="4 2" />
+              <Line type="monotone" dataKey="ibkr" stroke="#58a6ff" strokeWidth={1.5} dot={false} name="IBKR NAV" strokeDasharray="4 2" />
             </LineChart>
           </ResponsiveContainer>
         ) : (
@@ -412,7 +412,7 @@ export default function ReconciliationPage() {
       {/* Main reconciliation table */}
       <div className="flex-1 overflow-hidden">
         <DashboardPanel
-          title="BROKER RECONCILIATION — PAPERBROKER vs ALPACABROKER"
+          title="BROKER RECONCILIATION — PAPERBROKER vs IBKRBROKER"
           className="h-full"
           noPadding
           headerRight={<StatusLegend />}

@@ -454,8 +454,8 @@ ROUTING_RULES: List[RoutingRule] = [
         rule_id="R09",
         description=(
             "IBKRBroker is the SOLE execution broker. No raw API calls to IBKR, "
-            "Tradier, or any other broker. AlpacaBroker and TradierBroker exist only "
-            "as legacy references — they MUST NOT be used for new execution code."
+            "Tradier, or any other broker. TradierBroker exists only as a legacy "
+            "reference and MUST NOT be used for new execution code."
         ),
         enforced_by="ibkr_broker",
         check_type="exclusive_broker",
@@ -586,7 +586,6 @@ def validate_wiring() -> Dict[str, Any]:
     # Scan key files for direct IBKRBroker/IBKRBroker (legacy) usage in
     # execution paths (not legacy references or try/except fallbacks).
     _FORBIDDEN_BROKER_IMPORTS = [
-        ("engine.execution.alpaca_broker", "AlpacaBroker"),
         ("engine.execution.tradier_broker", "TradierBroker"),
     ]
     _FILES_TO_SCAN = [
