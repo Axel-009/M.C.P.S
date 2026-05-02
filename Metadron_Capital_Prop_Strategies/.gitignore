@@ -1,0 +1,52 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.env
+.env.vault.plain
+!.env.vault.gpg
+dist/
+build/
+node_modules/
+*.so
+*.o
+*.a
+*.whl
+*.egg
+.venv/
+*.log
+.DS_Store
+target/
+*.pkl
+
+# Runtime logs and data directories
+logs/*
+!logs/.gitkeep
+data/paul_patterns/
+data/gsd_gradients/
+data/gsd_planning/
+
+# \u2500\u2500 Sub-repo overrides \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+# Keep build/ ignored globally (including open-bb build configs)
+
+# ML model artifacts needed for integration
+!repos/layer3_ml/QLIB/examples/benchmarks/**/*.pkl
+!intelligence_platform/QLIB/examples/benchmarks/**/*.pkl
+!repos/layer3_ml/Stock-prediction/**/*.pkl
+!repos/layer5_infra/Kserve/**/*.pkl
+
+# NVIDIA CUDA pre-built plugin binaries
+!repos/layer5_infra/nividia-repo/**/*.so
+!repos/layer5_infra/nividia-repo/**/*.o
+
+# Frontend (Node/Vite)
+server/public
+vite.config.ts.*
+*.tar.gz
+*.db
+*.db-shm
+*.db-wal
+Qwen 2.5-7b/assets/Qwen2.5_Omni.pdf
+
+# graphifyy output
+graphify-out/

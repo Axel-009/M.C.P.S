@@ -1,0 +1,4344 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "9.0.0"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "gauge",
+      "name": "Gauge",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "state-timeline",
+      "name": "State timeline",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": []
+  },
+  "description": "Metadron STRAT engine health \u2014 VolatilitySurface, StatArbEngine, MLVoteEnsemble, DecisionMatrix, MetadronCube, PatternRecognition",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 100,
+      "title": "Engine Health Overview",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Real-time health status of all STRAT engines (1=healthy, 0=degraded)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "OFFLINE"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "HEALTHY"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 101,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "expr": "metadron_strat_engine_health",
+          "legendFormat": "{{engine}}",
+          "refId": "A"
+        }
+      ],
+      "title": "STRAT Engine Status",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Engine health timeline \u2014 shows when engines go up/down",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "DOWN"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "UP"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 102,
+      "targets": [
+        {
+          "expr": "metadron_strat_engine_health",
+          "legendFormat": "{{engine}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Engine Health Timeline",
+      "type": "state-timeline"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 10
+      },
+      "id": 200,
+      "title": "MetadronCube \u2014 Regime & Sleeves",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Active regime from the MetadronCube",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "dark-blue",
+                  "text": "INACTIVE"
+                },
+                "1": {
+                  "color": "yellow",
+                  "text": "ACTIVE"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-blue",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 0,
+        "y": 11
+      },
+      "id": 201,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "expr": "metadron_cube_regime",
+          "legendFormat": "{{regime_name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Cube Regime State",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "MetadronCube regime confidence score",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.3
+              },
+              {
+                "color": "yellow",
+                "value": 0.5
+              },
+              {
+                "color": "green",
+                "value": 0.7
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 11
+      },
+      "id": 202,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "targets": [
+        {
+          "expr": "metadron_cube_regime_confidence",
+          "legendFormat": "Confidence",
+          "refId": "A"
+        }
+      ],
+      "title": "Regime Confidence",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Cube composite signal score",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 30
+              },
+              {
+                "color": "green",
+                "value": 60
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 11
+      },
+      "id": 203,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "expr": "metadron_cube_signal_score",
+          "legendFormat": "Signal Score",
+          "refId": "A"
+        }
+      ],
+      "title": "Cube Signal Score",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Sleeve allocation weights from MetadronCube",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "lineWidth": 1
+          },
+          "unit": "percentunit"
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 204,
+      "targets": [
+        {
+          "expr": "metadron_cube_sleeve_weight",
+          "legendFormat": "{{sleeve}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Sleeve Allocation Weights",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 300,
+      "title": "VolatilitySurface",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Implied volatility over time",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "opacity",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "showPoints": "never"
+          },
+          "unit": "percentunit"
+        }
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 22
+      },
+      "id": 301,
+      "targets": [
+        {
+          "expr": "metadron_vol_surface_iv",
+          "legendFormat": "Implied Vol",
+          "refId": "A"
+        }
+      ],
+      "title": "Implied Volatility",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Volatility skew measurement",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "opacity",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "showPoints": "never"
+          }
+        }
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 22
+      },
+      "id": 302,
+      "targets": [
+        {
+          "expr": "metadron_vol_surface_skew",
+          "legendFormat": "Skew",
+          "refId": "A"
+        }
+      ],
+      "title": "Volatility Skew",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Term structure slope",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "opacity",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "showPoints": "never"
+          }
+        }
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 22
+      },
+      "id": 303,
+      "targets": [
+        {
+          "expr": "metadron_vol_surface_term_structure",
+          "legendFormat": "Term Structure",
+          "refId": "A"
+        }
+      ],
+      "title": "Term Structure Slope",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 29
+      },
+      "id": 400,
+      "title": "StatArbEngine",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Number of cointegrated pairs being tracked",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "green",
+                "value": 5
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 30
+      },
+      "id": 401,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "expr": "metadron_stat_arb_pairs_count",
+          "legendFormat": "Pairs",
+          "refId": "A"
+        }
+      ],
+      "title": "Cointegrated Pairs",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Number of active stat-arb trades",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 20
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 30
+      },
+      "id": 402,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "expr": "metadron_stat_arb_active_trades",
+          "legendFormat": "Active Trades",
+          "refId": "A"
+        }
+      ],
+      "title": "Active Trades",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Mean z-score across all stat-arb pairs",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "showPoints": "never"
+          }
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 30
+      },
+      "id": 403,
+      "targets": [
+        {
+          "expr": "metadron_stat_arb_mean_zscore",
+          "legendFormat": "Mean Z-Score",
+          "refId": "A"
+        }
+      ],
+      "title": "Mean Z-Score",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Portfolio beta from stat-arb book",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "max": 2,
+          "min": -2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": -0.3
+              },
+              {
+                "color": "yellow",
+                "value": 0.3
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 30
+      },
+      "id": 404,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "targets": [
+        {
+          "expr": "metadron_stat_arb_portfolio_beta",
+          "legendFormat": "Beta",
+          "refId": "A"
+        }
+      ],
+      "title": "Portfolio Beta",
+      "type": "gauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 35
+      },
+      "id": 500,
+      "title": "MLVoteEnsemble",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "ML Ensemble bullish vs bearish tier votes over time",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 70,
+            "gradientMode": "none",
+            "lineWidth": 1,
+            "stacking": {
+              "mode": "normal"
+            }
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Bullish"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Bearish"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 16,
+        "x": 0,
+        "y": 36
+      },
+      "id": 501,
+      "targets": [
+        {
+          "expr": "metadron_ml_ensemble_vote_bullish",
+          "legendFormat": "Bullish",
+          "refId": "A"
+        },
+        {
+          "expr": "metadron_ml_ensemble_vote_bearish",
+          "legendFormat": "Bearish",
+          "refId": "B"
+        }
+      ],
+      "title": "Ensemble Vote Distribution",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "MLVoteEnsemble aggregate confidence",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.3
+              },
+              {
+                "color": "yellow",
+                "value": 0.5
+              },
+              {
+                "color": "green",
+                "value": 0.7
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 36
+      },
+      "id": 502,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": true,
+        "showThresholdMarkers": true
+      },
+      "targets": [
+        {
+          "expr": "metadron_ml_ensemble_confidence",
+          "legendFormat": "Confidence",
+          "refId": "A"
+        }
+      ],
+      "title": "ML Ensemble Confidence",
+      "type": "gauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
+      "id": 600,
+      "title": "DecisionMatrix",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Gates passing vs total gates",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 3
+              },
+              {
+                "color": "green",
+                "value": 5
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 44
+      },
+      "id": 601,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "expr": "metadron_decision_matrix_gates_passed",
+          "legendFormat": "Passing",
+          "refId": "A"
+        },
+        {
+          "expr": "metadron_decision_matrix_gates_total",
+          "legendFormat": "Total",
+          "refId": "B"
+        }
+      ],
+      "title": "Gates Passed / Total",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Trade approval rate from DecisionMatrix (0-100%)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "max": 1,
+          "min": 0,
+          "unit": "percentunit",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.3
+              },
+              {
+                "color": "green",
+                "value": 0.6
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 44
+      },
+      "id": 602,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "targets": [
+        {
+          "expr": "metadron_decision_matrix_approval_rate",
+          "legendFormat": "Approval Rate",
+          "refId": "A"
+        }
+      ],
+      "title": "Approval Rate",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "DecisionMatrix evaluations over time by result (approved/rejected)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "opacity",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "showPoints": "never"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "approved"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "rejected"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 44
+      },
+      "id": 603,
+      "targets": [
+        {
+          "expr": "rate(metadron_decision_matrix_evaluations_total[5m])",
+          "legendFormat": "{{result}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Evaluation Rate (5m avg)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 50
+      },
+      "id": 700,
+      "title": "PatternRecognition & API Performance",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Number of active detected patterns",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 51
+      },
+      "id": 701,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "expr": "metadron_pattern_recognition_patterns_detected",
+          "legendFormat": "Patterns",
+          "refId": "A"
+        }
+      ],
+      "title": "Patterns Detected",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Pattern recognition mean confidence",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.7
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 51
+      },
+      "id": 702,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "targets": [
+        {
+          "expr": "metadron_pattern_recognition_confidence",
+          "legendFormat": "Confidence",
+          "refId": "A"
+        }
+      ],
+      "title": "Pattern Confidence",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "API request latency by endpoint (p95)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "showPoints": "never"
+          },
+          "unit": "s"
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 51
+      },
+      "id": 703,
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, rate(metadron_api_duration_seconds_bucket[5m]))",
+          "legendFormat": "p95 {{endpoint}}",
+          "refId": "A"
+        }
+      ],
+      "title": "API Latency (p95)",
+      "type": "timeseries"
+    },
+    {
+      "id": 704,
+      "type": "row",
+      "title": "TXLOG \u2014 Trade Execution Metrics",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 57
+      },
+      "collapsed": false
+    },
+    {
+      "id": 705,
+      "type": "stat",
+      "title": "Total Orders",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_txlog_orders_total",
+          "legendFormat": "Orders"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 58
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 706,
+      "type": "gauge",
+      "title": "Fill Rate",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_txlog_fill_rate",
+          "legendFormat": "Fill Rate"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 58
+      },
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 1,
+          "unit": "percentunit",
+          "thresholds": {
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.8
+              },
+              {
+                "color": "green",
+                "value": 0.95
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 707,
+      "type": "gauge",
+      "title": "Reject Rate",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_txlog_reject_rate",
+          "legendFormat": "Reject Rate"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 58
+      },
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 1,
+          "unit": "percentunit",
+          "thresholds": {
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.05
+              },
+              {
+                "color": "red",
+                "value": 0.15
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 708,
+      "type": "stat",
+      "title": "Avg Slippage (bps)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_txlog_avg_slippage_bps",
+          "legendFormat": "Slippage"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 58
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 2,
+          "thresholds": {
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 2
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 709,
+      "type": "stat",
+      "title": "Notional Volume",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_txlog_notional_volume",
+          "legendFormat": "Volume"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 58
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 0,
+          "thresholds": {
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 710,
+      "type": "barchart",
+      "title": "Orders by Side",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_txlog_orders_by_side",
+          "legendFormat": "{{side}}"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 58
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      }
+    },
+    {
+      "id": 711,
+      "type": "timeseries",
+      "title": "Fill & Reject Rate Over Time",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_txlog_fill_rate",
+          "legendFormat": "Fill Rate"
+        },
+        {
+          "expr": "metadron_txlog_reject_rate",
+          "legendFormat": "Reject Rate"
+        }
+      ],
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 62
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1
+        }
+      }
+    },
+    {
+      "id": 712,
+      "type": "timeseries",
+      "title": "Notional Volume Over Time",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_txlog_notional_volume",
+          "legendFormat": "Volume $"
+        }
+      ],
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 62
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD"
+        }
+      }
+    },
+    {
+      "id": 713,
+      "type": "row",
+      "title": "Futures Engine & BetaCorridor",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 69
+      },
+      "collapsed": false
+    },
+    {
+      "id": 714,
+      "type": "stat",
+      "title": "Futures Positions",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_futures_positions_count",
+          "legendFormat": "Futures Positions"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 70
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 715,
+      "type": "stat",
+      "title": "Futures P&L",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_futures_total_pnl",
+          "legendFormat": "Futures P&L"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 70
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "thresholds": {
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 716,
+      "type": "gauge",
+      "title": "Margin Utilization",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_futures_margin_utilization",
+          "legendFormat": "Margin Utilization"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 70
+      },
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 100,
+          "unit": "percent",
+          "thresholds": {
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 60
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 717,
+      "type": "stat",
+      "title": "Notional Exposure",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_futures_notional_exposure",
+          "legendFormat": "Notional Exposure"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 70
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "thresholds": {
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 718,
+      "type": "stat",
+      "title": "Current Beta",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_futures_beta_current",
+          "legendFormat": "Current Beta"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 70
+      },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 3,
+          "thresholds": {
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 719,
+      "type": "stat",
+      "title": "Target Beta",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_futures_beta_target",
+          "legendFormat": "Target Beta"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 70
+      },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 3,
+          "thresholds": {
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 720,
+      "type": "timeseries",
+      "title": "Futures P&L Over Time",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_futures_total_pnl",
+          "legendFormat": "Unrealized P&L"
+        }
+      ],
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 74
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD"
+        }
+      }
+    },
+    {
+      "id": 721,
+      "type": "timeseries",
+      "title": "Beta: Current vs Target",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "metadron_futures_beta_current",
+          "legendFormat": "Current Beta"
+        },
+        {
+          "expr": "metadron_futures_beta_target",
+          "legendFormat": "Target Beta"
+        }
+      ],
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 74
+      },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 3
+        }
+      }
+    },
+    {
+      "id": 722,
+      "title": "TCA \u2014 Transaction Cost Analysis",
+      "type": "row",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 80
+      }
+    },
+    {
+      "id": 723,
+      "title": "TCA: Avg Total Cost",
+      "type": "stat",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 81
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 3
+              },
+              {
+                "color": "red",
+                "value": 6
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "metadron_tca_avg_total_cost_bps",
+          "legendFormat": "TCA: Avg Total Cost",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "auto"
+      }
+    },
+    {
+      "id": 724,
+      "title": "TCA: Avg Spread",
+      "type": "stat",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 81
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 3
+              },
+              {
+                "color": "red",
+                "value": 6
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "metadron_tca_avg_spread_bps",
+          "legendFormat": "TCA: Avg Spread",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "auto"
+      }
+    },
+    {
+      "id": 725,
+      "title": "TCA: Quality Score",
+      "type": "stat",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 81
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 40
+              },
+              {
+                "color": "green",
+                "value": 70
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "metadron_tca_execution_quality",
+          "legendFormat": "TCA: Quality Score",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "auto"
+      }
+    },
+    {
+      "id": 726,
+      "title": "TCA: Trades Analyzed",
+      "type": "stat",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 81
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "metadron_tca_trades_analyzed",
+          "legendFormat": "TCA: Trades Analyzed",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "auto"
+      }
+    },
+    {
+      "id": 727,
+      "title": "TCA: Avg Total Cost (bps)",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 85
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "drawStyle": "line",
+            "pointSize": 5
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "metadron_tca_avg_total_cost_bps",
+          "legendFormat": "TCA: Avg Total Cost (bps)",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
+        }
+      ],
+      "options": {}
+    },
+    {
+      "id": 728,
+      "title": "TCA: Avg Market Impact (bps)",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 85
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "drawStyle": "line",
+            "pointSize": 5
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "metadron_tca_avg_impact_bps",
+          "legendFormat": "TCA: Avg Market Impact (bps)",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
+        }
+      ],
+      "options": {}
+    },
+    {
+      "id": 729,
+      "title": "TCA: Avg Timing Cost (bps)",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 91
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "drawStyle": "line",
+            "pointSize": 5
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "metadron_tca_avg_timing_bps",
+          "legendFormat": "TCA: Avg Timing Cost (bps)",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
+        }
+      ],
+      "options": {}
+    },
+    {
+      "id": 730,
+      "title": "TCA: Total Impl. Shortfall ($)",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 91
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "drawStyle": "line",
+            "pointSize": 5
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "metadron_tca_total_is_usd",
+          "legendFormat": "TCA: Total Impl. Shortfall ($)",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
+        }
+      ],
+      "options": {}
+    },
+    {
+      "id": 731,
+      "title": "TCA: Outliers Detected",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 97
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "drawStyle": "line",
+            "pointSize": 5
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "metadron_tca_outliers_count",
+          "legendFormat": "TCA: Outliers Detected",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
+        }
+      ],
+      "options": {}
+    },
+    {
+      "id": 732,
+      "title": "TCA: Total Volume Analyzed ($)",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 97
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "drawStyle": "line",
+            "pointSize": 5
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "metadron_tca_total_volume_usd",
+          "legendFormat": "TCA: Total Volume Analyzed ($)",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          }
+        }
+      ],
+      "options": {}
+    },
+    {
+      "id": 740,
+      "type": "row",
+      "title": "Agent Intelligence System",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 103
+      },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 741,
+      "type": "gauge",
+      "title": "Agents: Total Count",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 104
+      },
+      "targets": [
+        {
+          "expr": "metadron_agents_total",
+          "legendFormat": "Total"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "green",
+                "value": 20
+              }
+            ]
+          },
+          "max": 30
+        }
+      }
+    },
+    {
+      "id": 742,
+      "type": "gauge",
+      "title": "Agents: Active",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 104
+      },
+      "targets": [
+        {
+          "expr": "metadron_agents_active",
+          "legendFormat": "Active"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "green",
+                "value": 20
+              }
+            ]
+          },
+          "max": 30
+        }
+      }
+    },
+    {
+      "id": 743,
+      "type": "gauge",
+      "title": "Agents: Avg Accuracy",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 104
+      },
+      "targets": [
+        {
+          "expr": "metadron_agents_avg_accuracy",
+          "legendFormat": "Accuracy"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.5
+              },
+              {
+                "color": "green",
+                "value": 0.7
+              }
+            ]
+          },
+          "max": 1
+        }
+      }
+    },
+    {
+      "id": 744,
+      "type": "gauge",
+      "title": "Agents: Avg Sharpe",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 104
+      },
+      "targets": [
+        {
+          "expr": "metadron_agents_avg_sharpe",
+          "legendFormat": "Sharpe"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1.0
+              },
+              {
+                "color": "green",
+                "value": 2.0
+              }
+            ]
+          },
+          "max": 4
+        }
+      }
+    },
+    {
+      "id": 745,
+      "type": "gauge",
+      "title": "Agents: Bull Consensus %",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 104
+      },
+      "targets": [
+        {
+          "expr": "metadron_agents_consensus_bull_pct",
+          "legendFormat": "Bull %"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 30
+              },
+              {
+                "color": "green",
+                "value": 50
+              }
+            ]
+          },
+          "max": 100
+        }
+      }
+    },
+    {
+      "id": 746,
+      "type": "gauge",
+      "title": "Agents: Avg Composite Score",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 104
+      },
+      "targets": [
+        {
+          "expr": "metadron_agents_avg_composite",
+          "legendFormat": "Composite"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.3
+              },
+              {
+                "color": "green",
+                "value": 0.6
+              }
+            ]
+          },
+          "max": 1
+        }
+      }
+    },
+    {
+      "id": 747,
+      "type": "barchart",
+      "title": "Agents: Tier Distribution",
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 0,
+        "y": 108
+      },
+      "targets": [
+        {
+          "expr": "metadron_agents_by_tier",
+          "legendFormat": "{{tier}}"
+        }
+      ],
+      "options": {
+        "orientation": "horizontal"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      }
+    },
+    {
+      "id": 748,
+      "type": "timeseries",
+      "title": "Agents: Herding & Concentration Risk",
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 8,
+        "y": 108
+      },
+      "targets": [
+        {
+          "expr": "metadron_agents_herding_risk",
+          "legendFormat": "Herding Risk"
+        },
+        {
+          "expr": "metadron_agents_concentration_risk",
+          "legendFormat": "Concentration Risk"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "fillOpacity": 10
+          }
+        }
+      }
+    },
+    {
+      "id": 749,
+      "type": "timeseries",
+      "title": "Agents: Gradient Alignment & Total Signals",
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 16,
+        "y": 108
+      },
+      "targets": [
+        {
+          "expr": "metadron_agents_gradient_alignment",
+          "legendFormat": "Gradient Alignment"
+        },
+        {
+          "expr": "rate(metadron_agents_total_signals[5m])",
+          "legendFormat": "Signals/5m"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "fillOpacity": 10
+          }
+        }
+      }
+    },
+    {
+      "id": 750,
+      "type": "timeseries",
+      "title": "Agents: Enforcement Events Rate",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 114
+      },
+      "targets": [
+        {
+          "expr": "rate(metadron_agents_enforcement_events{severity=\"INFO\"}[5m])",
+          "legendFormat": "INFO"
+        },
+        {
+          "expr": "rate(metadron_agents_enforcement_events{severity=\"WARNING\"}[5m])",
+          "legendFormat": "WARNING"
+        },
+        {
+          "expr": "rate(metadron_agents_enforcement_events{severity=\"CRITICAL\"}[5m])",
+          "legendFormat": "CRITICAL"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "fillOpacity": 15
+          }
+        }
+      }
+    },
+    {
+      "id": 751,
+      "type": "timeseries",
+      "title": "Agents: Accuracy & Sharpe Trend",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 114
+      },
+      "targets": [
+        {
+          "expr": "metadron_agents_avg_accuracy",
+          "legendFormat": "Avg Accuracy"
+        },
+        {
+          "expr": "metadron_agents_avg_sharpe",
+          "legendFormat": "Avg Sharpe"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "fillOpacity": 10
+          }
+        }
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 121
+      },
+      "id": 752,
+      "panels": [],
+      "title": "Quant Strategy Engine \u2014 L6.5 HFT Pipeline",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 6
+              },
+              {
+                "color": "red",
+                "value": 10
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 122
+      },
+      "id": 753,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "title": "Quant: Active Strategies",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_strategies_active",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 122
+      },
+      "id": 754,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "title": "Quant: Executions",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_executions_total",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 3
+              },
+              {
+                "color": "orange",
+                "value": 5
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 122
+      },
+      "id": 755,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "title": "Quant: Patterns Detected",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_patterns_detected",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 20
+              },
+              {
+                "color": "red",
+                "value": 30
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 122
+      },
+      "id": 756,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "title": "Quant: VIX Level",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_vix_regime",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.5
+              },
+              {
+                "color": "red",
+                "value": 0.8
+              }
+            ]
+          },
+          "min": 0,
+          "max": 1,
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 122
+      },
+      "id": 757,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "title": "Quant: Strategy Agreement",
+      "type": "gauge",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_strategy_agreement",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.5
+              },
+              {
+                "color": "red",
+                "value": 0.8
+              }
+            ]
+          },
+          "min": 0,
+          "max": 1,
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 122
+      },
+      "id": 758,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "title": "Quant: Learning Consistency",
+      "type": "gauge",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_learning_consistency",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 126
+      },
+      "id": 759,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "title": "Quant: Consensus Signal & Agreement",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_consensus_signal",
+          "legendFormat": "Consensus Signal",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_strategy_agreement",
+          "legendFormat": "Agreement",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_size_multiplier",
+          "legendFormat": "Size Multiplier",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 126
+      },
+      "id": 760,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "title": "Quant: Active Strategies & Kill Switch",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_strategies_active",
+          "legendFormat": "Active Strategies",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_kill_switch * 12",
+          "legendFormat": "Kill Switch (scaled)",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 132
+      },
+      "id": 761,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "title": "Quant: OOS Sharpe & Patterns",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_factor_oos_sharpe",
+          "legendFormat": "OOS Sharpe",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_patterns_detected",
+          "legendFormat": "Pattern Signals",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 132
+      },
+      "id": 762,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "title": "Quant: VIX Regime & Executions",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_quant_vix_regime",
+          "legendFormat": "VIX Level",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "rate(metadron_quant_executions_total[5m])",
+          "legendFormat": "Execution Rate/5m",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 139
+      },
+      "id": 763,
+      "panels": [],
+      "title": "Broker Reconciliation \u2014 Paper vs Alpaca",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 140
+      },
+      "id": 764,
+      "title": "Recon: Matched",
+      "type": "stat",
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_recon_positions_matched",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 3
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 140
+      },
+      "id": 765,
+      "title": "Recon: Mismatched",
+      "type": "stat",
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_recon_positions_mismatched",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 140
+      },
+      "id": 766,
+      "title": "Recon: Total Positions",
+      "type": "stat",
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_recon_total_positions",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 5000
+              },
+              {
+                "color": "red",
+                "value": 50000
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 140
+      },
+      "id": 767,
+      "title": "Recon: NAV Delta ($)",
+      "type": "stat",
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_recon_nav_delta",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 140
+      },
+      "id": 768,
+      "title": "Recon: Paper NAV",
+      "type": "stat",
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_recon_paper_nav",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 140
+      },
+      "id": 769,
+      "title": "Recon: Alpaca NAV",
+      "type": "stat",
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_recon_alpaca_nav",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 144
+      },
+      "id": 770,
+      "title": "Recon: NAV Comparison",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_recon_paper_nav",
+          "legendFormat": "Paper NAV",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_recon_alpaca_nav",
+          "legendFormat": "Alpaca NAV",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "metadron-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 144
+      },
+      "id": 771,
+      "title": "Recon: Match Status",
+      "type": "timeseries",
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_recon_positions_matched",
+          "legendFormat": "Matched",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "metadron-prometheus"
+          },
+          "expr": "metadron_recon_positions_mismatched",
+          "legendFormat": "Mismatched",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "id": 780,
+      "type": "row",
+      "title": "ETF Dashboard",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 152
+      },
+      "panels": []
+    },
+    {
+      "id": 781,
+      "type": "stat",
+      "title": "ETF Positions",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 153
+      },
+      "targets": [
+        {
+          "expr": "metadron_etf_positions_count",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#00d4aa",
+            "mode": "fixed"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#00d4aa",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "id": 782,
+      "type": "stat",
+      "title": "ETFs Tracked",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 153
+      },
+      "targets": [
+        {
+          "expr": "metadron_etf_tracked_total",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#3b82f6",
+            "mode": "fixed"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#3b82f6",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "id": 783,
+      "type": "stat",
+      "title": "ETF Market Value",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 153
+      },
+      "targets": [
+        {
+          "expr": "metadron_etf_total_market_value",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#d29922",
+            "mode": "fixed"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#d29922",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "id": 784,
+      "type": "stat",
+      "title": "Categories Active",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 153
+      },
+      "targets": [
+        {
+          "expr": "metadron_etf_categories_active",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#a855f7",
+            "mode": "fixed"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#a855f7",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "id": 785,
+      "type": "stat",
+      "title": "ETF Unrealized P&L",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 157
+      },
+      "targets": [
+        {
+          "expr": "metadron_etf_unrealized_pnl",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#3fb950",
+            "mode": "fixed"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#3fb950",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "id": 786,
+      "type": "stat",
+      "title": "ETF Portfolio Weight %",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 157
+      },
+      "targets": [
+        {
+          "expr": "metadron_etf_portfolio_weight",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#22d3ee",
+            "mode": "fixed"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#22d3ee",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "id": 787,
+      "type": "gauge",
+      "title": "ETF Engine Health",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 157
+      },
+      "targets": [
+        {
+          "expr": "metadron_strat_engine_health{engine=\"ETFDashboard\"}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#f85149",
+                "value": null
+              },
+              {
+                "color": "#3fb950",
+                "value": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 788,
+      "type": "timeseries",
+      "title": "ETF: Market Value Over Time",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 161
+      },
+      "targets": [
+        {
+          "expr": "metadron_etf_total_market_value",
+          "refId": "A",
+          "legendFormat": "Market Value"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "fillOpacity": 15,
+            "lineWidth": 2,
+            "spanNulls": true
+          }
+        }
+      }
+    },
+    {
+      "id": 789,
+      "type": "timeseries",
+      "title": "ETF: Unrealized P&L Over Time",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 161
+      },
+      "targets": [
+        {
+          "expr": "metadron_etf_unrealized_pnl",
+          "refId": "A",
+          "legendFormat": "Unrealized P&L"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#3fb950",
+            "mode": "fixed"
+          },
+          "custom": {
+            "fillOpacity": 15,
+            "lineWidth": 2,
+            "spanNulls": true
+          }
+        }
+      }
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 37,
+  "tags": [
+    "metadron",
+    "engines",
+    "strat",
+    "trading"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Metadron STRAT + TXLOG + Futures Engines",
+  "uid": "metadron-strat-engines",
+  "version": 1
+}
